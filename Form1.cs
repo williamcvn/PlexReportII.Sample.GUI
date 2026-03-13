@@ -1235,6 +1235,7 @@ namespace PlexReportII.Sample.GUI
             CheckBox? aboveCheck = null;
             
             Control? spacingCombo = null;
+            Control? spacingLabel = null;
             
             foreach (Control c in this.Controls) { 
                 if (c.Name == "headerFooterGroup") {
@@ -1243,6 +1244,7 @@ namespace PlexReportII.Sample.GUI
                         suppCheck = c.Controls["addSupplementalTextCheck"] as CheckBox;
                         aboveCheck = c.Controls["addAboveFooterCheck"] as CheckBox;
                         spacingCombo = c.Controls["_flagNoteSpacingCombo"];
+                        spacingLabel = c.Controls["flagNoteSpacingLabel"];
                 }
             }
 
@@ -1287,7 +1289,10 @@ namespace PlexReportII.Sample.GUI
             }
             
             // 只要 CSV 有載入，就保持顯示
-            heightLabel.Visible = _isFlagNoteCsvLoaded;
+            bool showElements = _isFlagNoteCsvLoaded;
+            if (heightLabel != null) heightLabel.Visible = showElements;
+            if (spacingCombo != null) spacingCombo.Visible = showElements;
+            if (spacingLabel != null) spacingLabel.Visible = showElements;
         }
 
         // ===== Summary Result Table =====

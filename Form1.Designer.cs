@@ -290,7 +290,7 @@ partial class Form1
         headerFooterGroup.Font = new Font("Microsoft JhengHei UI", 10F);
         headerFooterGroup.Location = new Point(20, 190);
         headerFooterGroup.Name = "headerFooterGroup";
-        headerFooterGroup.Size = new Size(920, 180);
+        headerFooterGroup.Size = new Size(940, 180);
         headerFooterGroup.TabIndex = 3;
         headerFooterGroup.TabStop = false;
         headerFooterGroup.Text = "Header / Footer 設定";
@@ -489,7 +489,7 @@ partial class Form1
         // 
         flagNoteHeightLabel.AutoSize = true;
         flagNoteHeightLabel.Font = new Font("Microsoft JhengHei UI", 9F);
-        flagNoteHeightLabel.Location = new Point(590, 119);
+        flagNoteHeightLabel.Location = new Point(770, 119);
         flagNoteHeightLabel.Name = "flagNoteHeightLabel";
         flagNoteHeightLabel.Size = new Size(125, 15);
         flagNoteHeightLabel.TabIndex = 16;
@@ -500,7 +500,7 @@ partial class Form1
         // 
         flagNoteSpacingLabel.AutoSize = true;
         flagNoteSpacingLabel.Font = new Font("Microsoft JhengHei UI", 9F);
-        flagNoteSpacingLabel.Location = new Point(730, 119);
+        flagNoteSpacingLabel.Location = new Point(590, 119);
         flagNoteSpacingLabel.Name = "flagNoteSpacingLabel";
         flagNoteSpacingLabel.Size = new Size(111, 15);
         flagNoteSpacingLabel.TabIndex = 17;
@@ -512,7 +512,7 @@ partial class Form1
         _flagNoteSpacingCombo.Font = new Font("Microsoft JhengHei UI", 9F);
         _flagNoteSpacingCombo.FormattingEnabled = true;
         _flagNoteSpacingCombo.Items.AddRange(new object[] { "2", "5", "10", "15", "20", "25", "30", "40", "50" });
-        _flagNoteSpacingCombo.Location = new Point(845, 116);
+        _flagNoteSpacingCombo.Location = new Point(710, 116);
         _flagNoteSpacingCombo.Name = "_flagNoteSpacingCombo";
         _flagNoteSpacingCombo.Size = new Size(50, 23);
         _flagNoteSpacingCombo.TabIndex = 18;
