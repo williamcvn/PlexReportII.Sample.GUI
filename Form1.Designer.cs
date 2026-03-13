@@ -42,6 +42,8 @@ partial class Form1
         operatorLabel = new Label();
         operatorInput = new TextBox();
         ruoCheck = new CheckBox();
+        flagNoteSpacingLabel = new Label();
+        _flagNoteSpacingCombo = new ComboBox();
         flagNoteLabel = new Label();
         loadFlagNoteCsvButton = new Button();
         addSupplementalTextCheck = new CheckBox();
@@ -281,6 +283,8 @@ partial class Form1
         headerFooterGroup.Controls.Add(addSupplementalTextCheck);
         headerFooterGroup.Controls.Add(addAboveFooterCheck);
         headerFooterGroup.Controls.Add(flagNoteHeightLabel);
+        headerFooterGroup.Controls.Add(flagNoteSpacingLabel);
+        headerFooterGroup.Controls.Add(_flagNoteSpacingCombo);
         headerFooterGroup.Controls.Add(supplementalTextLabel);
         headerFooterGroup.Controls.Add(supplementalTextInput);
         headerFooterGroup.Font = new Font("Microsoft JhengHei UI", 10F);
@@ -491,6 +495,30 @@ partial class Form1
         flagNoteHeightLabel.TabIndex = 16;
         flagNoteHeightLabel.Text = "Flag Note Height: ---";
         flagNoteHeightLabel.Visible = false;
+        // 
+        // flagNoteSpacingLabel
+        // 
+        flagNoteSpacingLabel.AutoSize = true;
+        flagNoteSpacingLabel.Font = new Font("Microsoft JhengHei UI", 9F);
+        flagNoteSpacingLabel.Location = new Point(730, 119);
+        flagNoteSpacingLabel.Name = "flagNoteSpacingLabel";
+        flagNoteSpacingLabel.Size = new Size(111, 15);
+        flagNoteSpacingLabel.TabIndex = 17;
+        flagNoteSpacingLabel.Text = "Flag Note頂部間距:";
+        flagNoteSpacingLabel.Visible = false;
+        // 
+        // _flagNoteSpacingCombo
+        // 
+        _flagNoteSpacingCombo.Font = new Font("Microsoft JhengHei UI", 9F);
+        _flagNoteSpacingCombo.FormattingEnabled = true;
+        _flagNoteSpacingCombo.Items.AddRange(new object[] { "2", "5", "10", "15", "20", "25", "30", "40", "50" });
+        _flagNoteSpacingCombo.Location = new Point(845, 116);
+        _flagNoteSpacingCombo.Name = "_flagNoteSpacingCombo";
+        _flagNoteSpacingCombo.Size = new Size(50, 23);
+        _flagNoteSpacingCombo.TabIndex = 18;
+        _flagNoteSpacingCombo.Text = "2";
+        _flagNoteSpacingCombo.Visible = false;
+        _flagNoteSpacingCombo.TextChanged += FlagNoteSpacingCombo_TextChanged;
         // 
         // supplementalTextLabel
         // 
@@ -1398,6 +1426,8 @@ partial class Form1
         private System.Windows.Forms.CheckBox addSupplementalTextCheck;
         private System.Windows.Forms.CheckBox addAboveFooterCheck;
         private System.Windows.Forms.Label flagNoteHeightLabel;
+        private System.Windows.Forms.Label flagNoteSpacingLabel;
+        private System.Windows.Forms.ComboBox _flagNoteSpacingCombo;
         private System.Windows.Forms.Label supplementalTextLabel;
         private System.Windows.Forms.TextBox supplementalTextInput;
         private System.Windows.Forms.Button createPdfButton;

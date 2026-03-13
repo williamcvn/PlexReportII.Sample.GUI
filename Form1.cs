@@ -652,6 +652,17 @@ namespace PlexReportII.Sample.GUI
                 {
                     _currentReport.AllowCopyContent = _allowCopyContentCheck.Checked;
                 }
+                
+                Control? flagSpacingCombo = null;
+                foreach (Control c in this.Controls) { 
+                    if (c.Name == "headerFooterGroup") {
+                        flagSpacingCombo = c.Controls["_flagNoteSpacingCombo"];
+                    }
+                }
+                if (flagSpacingCombo is ComboBox combo && float.TryParse(combo.Text, out float spacing))
+                {
+                    _currentReport.FlagNoteSpacing = spacing;
+                }
 
                 // 動態更新線條繪製的預設值 (對應當前邊距設定)
                 if (_lineStartXInput != null) _lineStartXInput.Value = (decimal)_currentReport.PageRect.X;
@@ -1211,6 +1222,11 @@ namespace PlexReportII.Sample.GUI
             }
         }
 
+        private void FlagNoteSpacingCombo_TextChanged(object? sender, EventArgs e)
+        {
+            UpdateFlagNoteHeightLabel();
+        }
+
         private void UpdateFlagNoteHeightLabel()
         {
             Control? heightLabel = null;
@@ -1218,12 +1234,15 @@ namespace PlexReportII.Sample.GUI
             CheckBox? suppCheck = null;
             CheckBox? aboveCheck = null;
             
+            Control? spacingCombo = null;
+            
             foreach (Control c in this.Controls) { 
                 if (c.Name == "headerFooterGroup") {
                         heightLabel = c.Controls["flagNoteHeightLabel"];
                         textInput = c.Controls["supplementalTextInput"];
                         suppCheck = c.Controls["addSupplementalTextCheck"] as CheckBox;
                         aboveCheck = c.Controls["addAboveFooterCheck"] as CheckBox;
+                        spacingCombo = c.Controls["_flagNoteSpacingCombo"];
                 }
             }
 
@@ -1234,11 +1253,18 @@ namespace PlexReportII.Sample.GUI
             if (isAnyChecked)
             {
                 float totalHeight = 0f;
+                // 取出上方間距設定
+                float spacingGap = 2f;
+                if (spacingCombo is ComboBox cb && float.TryParse(cb.Text, out float gap))
+                {
+                    spacingGap = gap;
+                }
+
                 // 使用簡易估算邏輯：每個 note 14pt (或透過 BasePdfReport)
                 if (_currentReport != null)
                 {
                     string? suppText = (suppCheck != null && suppCheck.Checked && textInput != null) ? textInput.Text : null;
-                    totalHeight = _currentReport.CalculateTotalFlagNoteHeight(_flagNoteData, suppText);
+                    totalHeight = _currentReport.CalculateTotalFlagNoteHeight(_flagNoteData, suppText) + spacingGap;
                 }
                 else
                 {
@@ -1249,6 +1275,7 @@ namespace PlexReportII.Sample.GUI
                     {
                         totalHeight += defaultLineHeight;
                     }
+                    totalHeight += spacingGap;
                 }
 
                 heightLabel.Text = $"Flag Note 預估高度: {totalHeight:F1} pt";
