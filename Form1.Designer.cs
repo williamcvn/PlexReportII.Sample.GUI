@@ -35,6 +35,8 @@ partial class Form1
         headerTitleLabel = new Label();
         headerTitleInput = new TextBox();
         loadLogoButton = new Button();
+        softwareNameLabel = new Label();
+        softwareNameInput = new TextBox();
         versionLabel = new Label();
         versionInput = new TextBox();
         operatorLabel = new Label();
@@ -267,6 +269,8 @@ partial class Form1
         headerFooterGroup.Controls.Add(headerTitleLabel);
         headerFooterGroup.Controls.Add(headerTitleInput);
         headerFooterGroup.Controls.Add(loadLogoButton);
+        headerFooterGroup.Controls.Add(softwareNameLabel);
+        headerFooterGroup.Controls.Add(softwareNameInput);
         headerFooterGroup.Controls.Add(versionLabel);
         headerFooterGroup.Controls.Add(versionInput);
         headerFooterGroup.Controls.Add(operatorLabel);
@@ -357,11 +361,32 @@ partial class Form1
         loadLogoButton.UseVisualStyleBackColor = true;
         loadLogoButton.Click += LoadLogoButton_Click;
         // 
+        // softwareNameLabel
+        // 
+        softwareNameLabel.AutoSize = true;
+        softwareNameLabel.Font = new Font("Microsoft JhengHei UI", 9F);
+        softwareNameLabel.Location = new Point(15, 85);
+        softwareNameLabel.Name = "softwareNameLabel";
+        softwareNameLabel.Size = new Size(58, 15);
+        softwareNameLabel.TabIndex = 100;
+        softwareNameLabel.Text = "軟體名稱:";
+        // 
+        // softwareNameInput
+        // 
+        softwareNameInput.Font = new Font("Microsoft JhengHei UI", 9F);
+        softwareNameInput.Location = new Point(80, 82);
+        softwareNameInput.Name = "softwareNameInput";
+        softwareNameInput.Size = new Size(100, 23);
+        softwareNameInput.TabIndex = 101;
+        softwareNameInput.Text = "DeXipher™";
+        softwareNameInput.Enter += HeaderFooterSetting_Enter;
+        softwareNameInput.Leave += HeaderFooterSetting_Changed;
+        // 
         // versionLabel
         // 
         versionLabel.AutoSize = true;
         versionLabel.Font = new Font("Microsoft JhengHei UI", 9F);
-        versionLabel.Location = new Point(15, 85);
+        versionLabel.Location = new Point(190, 85);
         versionLabel.Name = "versionLabel";
         versionLabel.Size = new Size(58, 15);
         versionLabel.TabIndex = 6;
@@ -370,7 +395,7 @@ partial class Form1
         // versionInput
         // 
         versionInput.Font = new Font("Microsoft JhengHei UI", 9F);
-        versionInput.Location = new Point(80, 82);
+        versionInput.Location = new Point(255, 82);
         versionInput.Name = "versionInput";
         versionInput.Size = new Size(80, 23);
         versionInput.TabIndex = 7;
@@ -382,7 +407,7 @@ partial class Form1
         // 
         operatorLabel.AutoSize = true;
         operatorLabel.Font = new Font("Microsoft JhengHei UI", 9F);
-        operatorLabel.Location = new Point(170, 85);
+        operatorLabel.Location = new Point(345, 85);
         operatorLabel.Name = "operatorLabel";
         operatorLabel.Size = new Size(46, 15);
         operatorLabel.TabIndex = 8;
@@ -391,7 +416,7 @@ partial class Form1
         // operatorInput
         // 
         operatorInput.Font = new Font("Microsoft JhengHei UI", 9F);
-        operatorInput.Location = new Point(220, 82);
+        operatorInput.Location = new Point(395, 82);
         operatorInput.Name = "operatorInput";
         operatorInput.Size = new Size(80, 23);
         operatorInput.TabIndex = 9;
@@ -403,7 +428,7 @@ partial class Form1
         // 
         ruoCheck.AutoSize = true;
         ruoCheck.Font = new Font("Microsoft JhengHei UI", 9F);
-        ruoCheck.Location = new Point(310, 84);
+        ruoCheck.Location = new Point(485, 84);
         ruoCheck.Name = "ruoCheck";
         ruoCheck.Size = new Size(130, 19);
         ruoCheck.TabIndex = 10;
@@ -1360,6 +1385,8 @@ partial class Form1
     private System.Windows.Forms.CheckBox showPageNumberCheck;
     private System.Windows.Forms.Label headerTitleLabel;
     private System.Windows.Forms.TextBox headerTitleInput;
+    private System.Windows.Forms.Label softwareNameLabel;
+    private System.Windows.Forms.TextBox softwareNameInput;
     private System.Windows.Forms.Button loadLogoButton;
     private System.Windows.Forms.Label versionLabel;
     private System.Windows.Forms.TextBox versionInput;

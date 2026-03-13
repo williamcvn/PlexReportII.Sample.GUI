@@ -1,4 +1,4 @@
-﻿// File Version: 1.0.2
+// File Version: 1.0.2
 // Last Modified: 2026-02-04
 // Change Owner: Office of William
 
@@ -741,6 +741,7 @@ namespace PlexReportII.Sample.GUI
                 CheckBox? showFooter = headerFooterGroup.Controls["showFooterCheck"] as CheckBox;
                 CheckBox? showPageNum = headerFooterGroup.Controls["showPageNumberCheck"] as CheckBox;
                 TextBox? headerTitle = headerFooterGroup.Controls["headerTitleInput"] as TextBox;
+                TextBox? softwareName = headerFooterGroup.Controls["softwareNameInput"] as TextBox;
                 TextBox? versionInput = headerFooterGroup.Controls["versionInput"] as TextBox;
                 TextBox? operatorInput = headerFooterGroup.Controls["operatorInput"] as TextBox;
                 CheckBox? ruoCheck = headerFooterGroup.Controls["ruoCheck"] as CheckBox;
@@ -751,6 +752,7 @@ namespace PlexReportII.Sample.GUI
                     if (showFooter != null) config.ShowFooter = showFooter.Checked;
                     if (showPageNum != null) config.ShowPageNumber = showPageNum.Checked;
                     if (headerTitle != null) config.HeaderTitle = headerTitle.Text;
+                    if (softwareName != null) config.SoftwareNameText = softwareName.Text;
                     if (versionInput != null) config.VersionText = versionInput.Text;
                     if (operatorInput != null) config.OperatorName = operatorInput.Text;
                     if (ruoCheck != null) config.IsResearchUseOnly = ruoCheck.Checked;
@@ -1048,6 +1050,7 @@ namespace PlexReportII.Sample.GUI
                         string label = control.Name switch
                         {
                             "headerTitle" => "Header 標題",
+                            "softwareNameInput" => "軟體名稱",
                             "versionInput" => "版本資訊",
                             "operatorInput" => "操作者",
                             _ => control.Name
