@@ -47,12 +47,13 @@ namespace PlexReportII.Sample.GUI
             // 設定視窗標題
             // Form size
             this.Size = new System.Drawing.Size(1000, 1000);
-            this.Text = "PlexReportII sample";
+            this.Text = "PlexReportII GUI (sample)";
             this.StartPosition = FormStartPosition.CenterScreen;
             this.FormBorderStyle = FormBorderStyle.FixedDialog;
             this.MaximizeBox = false;
 
-
+            // 設定表單圖示（假設 appicon.ico 在專案根目錄）
+            this.Icon = new System.Drawing.Icon("../../../logo48_48.ico");
         }
 
 

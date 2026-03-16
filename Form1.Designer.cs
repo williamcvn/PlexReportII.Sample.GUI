@@ -633,7 +633,7 @@ partial class Form1
         indvResultLabel.Name = "indvResultLabel";
         indvResultLabel.Size = new Size(320, 18);
         indvResultLabel.TabIndex = 0;
-        indvResultLabel.Text = "繪製Individual INDV_RESULT_TABLE_COL5";
+        indvResultLabel.Text = "繪製Individual INDV_RESULT_TABLE_5COL";
         //
         // loadIndvResultCsvButton
         //

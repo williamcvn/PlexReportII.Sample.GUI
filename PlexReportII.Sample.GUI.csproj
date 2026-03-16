@@ -1,6 +1,10 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
 
   <ItemGroup>
+    <Content Include="logo48_48.ico" />
+  </ItemGroup>
+
+  <ItemGroup>
     <Reference Include="PlexReportII">
       <HintPath>..\..\src\PlexReportII\bin\Release\net8.0\PlexReportII.dll</HintPath>
     </Reference>
@@ -14,6 +18,7 @@
     <Nullable>enable</Nullable>
     <UseWindowsForms>true</UseWindowsForms>
     <ImplicitUsings>enable</ImplicitUsings>
+    <ApplicationIcon>logo48_48.ico</ApplicationIcon>
   </PropertyGroup>
 
 </Project>
