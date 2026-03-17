@@ -35,6 +35,7 @@ partial class Form1
         headerTitleLabel = new Label();
         headerTitleInput = new TextBox();
         loadLogoButton = new Button();
+        removeLogoButton = new Button();
         softwareNameLabel = new Label();
         softwareNameInput = new TextBox();
         versionLabel = new Label();
@@ -276,6 +277,7 @@ partial class Form1
         headerFooterGroup.Controls.Add(headerTitleLabel);
         headerFooterGroup.Controls.Add(headerTitleInput);
         headerFooterGroup.Controls.Add(loadLogoButton);
+        headerFooterGroup.Controls.Add(removeLogoButton);
         headerFooterGroup.Controls.Add(softwareNameLabel);
         headerFooterGroup.Controls.Add(softwareNameInput);
         headerFooterGroup.Controls.Add(versionLabel);
@@ -369,6 +371,16 @@ partial class Form1
         loadLogoButton.Text = "載入 Logo...";
         loadLogoButton.UseVisualStyleBackColor = true;
         loadLogoButton.Click += LoadLogoButton_Click;
+        // 
+        // removeLogoButton
+        // 
+        removeLogoButton.Location = new Point(425, 50);
+        removeLogoButton.Name = "removeLogoButton";
+        removeLogoButton.Size = new Size(100, 27);
+        removeLogoButton.TabIndex = 6;
+        removeLogoButton.Text = "移除 Logo";
+        removeLogoButton.UseVisualStyleBackColor = true;
+        removeLogoButton.Click += RemoveLogoButton_Click;
         // 
         // softwareNameLabel
         // 
@@ -1463,21 +1475,22 @@ partial class Form1
     private System.Windows.Forms.Label softwareNameLabel;
     private System.Windows.Forms.TextBox softwareNameInput;
     private System.Windows.Forms.Button loadLogoButton;
+    private System.Windows.Forms.Button removeLogoButton;
     private System.Windows.Forms.Label versionLabel;
     private System.Windows.Forms.TextBox versionInput;
     private System.Windows.Forms.Label operatorLabel;
     private System.Windows.Forms.TextBox operatorInput;
-        private System.Windows.Forms.CheckBox ruoCheck;
-        private System.Windows.Forms.Label flagNoteLabel;
-        private System.Windows.Forms.Button loadFlagNoteCsvButton;
-        private System.Windows.Forms.CheckBox addSupplementalTextCheck;
-        private System.Windows.Forms.CheckBox addAboveFooterCheck;
-        private System.Windows.Forms.Label flagNoteHeightLabel;
-        private System.Windows.Forms.Label flagNoteSpacingLabel;
-        private System.Windows.Forms.ComboBox _flagNoteSpacingCombo;
-        private System.Windows.Forms.Label supplementalTextLabel;
-        private System.Windows.Forms.TextBox supplementalTextInput;
-        private System.Windows.Forms.Button createPdfButton;
+    private System.Windows.Forms.CheckBox ruoCheck;
+    private System.Windows.Forms.Label flagNoteLabel;
+    private System.Windows.Forms.Button loadFlagNoteCsvButton;
+    private System.Windows.Forms.CheckBox addSupplementalTextCheck;
+    private System.Windows.Forms.CheckBox addAboveFooterCheck;
+    private System.Windows.Forms.Label flagNoteHeightLabel;
+    private System.Windows.Forms.Label flagNoteSpacingLabel;
+    private System.Windows.Forms.ComboBox _flagNoteSpacingCombo;
+    private System.Windows.Forms.Label supplementalTextLabel;
+    private System.Windows.Forms.TextBox supplementalTextInput;
+    private System.Windows.Forms.Button createPdfButton;
     private System.Windows.Forms.Button previewPdfButton;
     private System.Windows.Forms.GroupBox _pdfPreviewGroup;
     private C1.Win.FlexViewer.C1FlexViewer _flexViewer;

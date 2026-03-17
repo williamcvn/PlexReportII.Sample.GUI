@@ -178,6 +178,9 @@ namespace PlexReportII.Sample.GUI
                         
                         // 更新狀態
                         AddStatusMessage($"Logo 已載入: {Path.GetFileName(ofd.FileName)}");
+
+                        // 即時更新預覽
+                        RefreshPreview();
                     }
                     catch (Exception ex)
                     {
@@ -185,6 +188,13 @@ namespace PlexReportII.Sample.GUI
                     }
                 }
             }
+        }
+
+        private void RemoveLogoButton_Click(object? sender, EventArgs e)
+        {
+            _currentLogo = null;
+            AddStatusMessage("Logo 已移除");
+            RefreshPreview();
         }
 
         private void LoadPcncCsvButton_Click(object? sender, EventArgs e)
