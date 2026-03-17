@@ -1345,7 +1345,7 @@ partial class Form1
         _pdfPreviewGroup.Anchor = AnchorStyles.Top | AnchorStyles.Bottom | AnchorStyles.Left | AnchorStyles.Right;
         _pdfPreviewGroup.Controls.Add(_flexViewer);
         _pdfPreviewGroup.Font = new Font("Microsoft JhengHei UI", 10F, FontStyle.Bold);
-        _pdfPreviewGroup.Location = new Point(780, 20);
+        _pdfPreviewGroup.Location = new Point(795, 20);
         _pdfPreviewGroup.Name = "_pdfPreviewGroup";
         _pdfPreviewGroup.Size = new Size(600, 935);
         _pdfPreviewGroup.TabIndex = 17;
