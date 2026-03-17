@@ -9,6 +9,8 @@ using System.Threading.Tasks;
 using System.Windows.Forms;
 using PlexReportII.Reports;
 using PlexReportII.Infrastructure;
+using C1.Win.FlexViewer;
+using C1.Win.Document;
 
 namespace PlexReportII.Sample.GUI
 {
@@ -46,11 +48,11 @@ namespace PlexReportII.Sample.GUI
 
             // 設定視窗標題
             // Form size
-            this.Size = new System.Drawing.Size(1000, 1000);
+            this.Size = new System.Drawing.Size(1420, 1000);
             this.Text = "PlexReportII GUI (sample)";
             this.StartPosition = FormStartPosition.CenterScreen;
-            this.FormBorderStyle = FormBorderStyle.FixedDialog;
-            this.MaximizeBox = false;
+            this.FormBorderStyle = FormBorderStyle.Sizable;
+            this.MaximizeBox = true;
 
             // 設定表單圖示（假設 appicon.ico 在專案根目錄）
             this.Icon = new System.Drawing.Icon("../../../logo48_48.ico");
@@ -680,6 +682,38 @@ namespace PlexReportII.Sample.GUI
                 _logger.Error("建立 PDF 失敗", ex);
                 AddStatusMessage($"錯誤: {ex.Message}");
                 MessageBox.Show($"建立 PDF 時發生錯誤：\n{ex.Message}", "錯誤",
+                    MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
+        }
+
+        private void PreviewPdfButton_Click(object? sender, EventArgs e)
+        {
+            try
+            {
+                if (_currentReport == null || !_currentReport.IsPdfInitialized)
+                {
+                    MessageBox.Show("請先按「建立 PDF」建立文件後，才能進行預覽。", "警告",
+                        MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                    return;
+                }
+
+                // 產出 PDF 串流
+                MemoryStream ms = _currentReport.ExportToStream();
+
+                // 使用 C1PdfDocumentSource 讀取串流
+                var pdfSource = new C1PdfDocumentSource();
+                pdfSource.LoadFromStream(ms);
+                
+                // 載入至 FlexViewer
+                _flexViewer.DocumentSource = pdfSource;
+
+                AddStatusMessage("預覽 PDF 成功");
+            }
+            catch (Exception ex)
+            {
+                _logger.Error("預覽 PDF 失敗", ex);
+                AddStatusMessage($"錯誤: {ex.Message}");
+                MessageBox.Show($"預覽 PDF 時發生錯誤：\n{ex.Message}", "錯誤",
                     MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
         }

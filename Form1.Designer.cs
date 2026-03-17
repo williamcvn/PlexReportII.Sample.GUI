@@ -42,36 +42,37 @@ partial class Form1
         operatorLabel = new Label();
         operatorInput = new TextBox();
         ruoCheck = new CheckBox();
-        flagNoteSpacingLabel = new Label();
-        _flagNoteSpacingCombo = new ComboBox();
         flagNoteLabel = new Label();
         loadFlagNoteCsvButton = new Button();
         addSupplementalTextCheck = new CheckBox();
         addAboveFooterCheck = new CheckBox();
         flagNoteHeightLabel = new Label();
+        flagNoteSpacingLabel = new Label();
+        _flagNoteSpacingCombo = new ComboBox();
         supplementalTextLabel = new Label();
         supplementalTextInput = new TextBox();
         createPdfButton = new Button();
+        previewPdfButton = new Button();
         exportPdfButton = new Button();
         openFolderButton = new Button();
         clearPdfButton = new Button();
         statusList = new ListBox();
         contentEditGroup = new GroupBox();
         _panelIndvResultTable = new Panel();
-        loadIndvResultCsvButton = new Button();
         drawIndvResultButton = new Button();
+        loadIndvResultCsvButton = new Button();
         indvResultLabel = new Label();
         _panelSampleControlTable = new Panel();
-        loadSampleControlCsvButton = new Button();
         drawSampleControlButton = new Button();
+        loadSampleControlCsvButton = new Button();
         sampleControlLabel = new Label();
         _panelWellInfo = new Panel();
-        loadWellInfoCsvButton = new Button();
         drawWellInfoButton = new Button();
+        loadWellInfoCsvButton = new Button();
         wellInfoLabel = new Label();
         _panelSummaryTable = new Panel();
-        loadSummaryDataCsvButton = new Button();
         drawSummaryTableButton = new Button();
+        loadSummaryDataCsvButton = new Button();
         summaryTableLabel = new Label();
         _panelSignature = new Panel();
         drawSignatureButton = new Button();
@@ -122,6 +123,8 @@ partial class Form1
         kitInfoLabel = new Label();
         _editModeCombo = new ComboBox();
         editModeLabel = new Label();
+        _pdfPreviewGroup = new GroupBox();
+        _flexViewer = new C1.Win.FlexViewer.C1FlexViewer();
         _positionInfoLabel = new TextBox();
         marginGroup.SuspendLayout();
         ((System.ComponentModel.ISupportInitialize)_marginHorizontalInput).BeginInit();
@@ -145,6 +148,8 @@ partial class Form1
         ((System.ComponentModel.ISupportInitialize)_lineLengthInput).BeginInit();
         ((System.ComponentModel.ISupportInitialize)_lineStartXInput).BeginInit();
         _panelKitInfo.SuspendLayout();
+        _pdfPreviewGroup.SuspendLayout();
+        ((System.ComponentModel.ISupportInitialize)_flexViewer).BeginInit();
         SuspendLayout();
         // 
         // titleLabel
@@ -290,7 +295,7 @@ partial class Form1
         headerFooterGroup.Font = new Font("Microsoft JhengHei UI", 10F);
         headerFooterGroup.Location = new Point(20, 190);
         headerFooterGroup.Name = "headerFooterGroup";
-        headerFooterGroup.Size = new Size(940, 180);
+        headerFooterGroup.Size = new Size(770, 180);
         headerFooterGroup.TabIndex = 3;
         headerFooterGroup.TabStop = false;
         headerFooterGroup.Text = "Header / Footer 設定";
@@ -489,7 +494,7 @@ partial class Form1
         // 
         flagNoteHeightLabel.AutoSize = true;
         flagNoteHeightLabel.Font = new Font("Microsoft JhengHei UI", 9F);
-        flagNoteHeightLabel.Location = new Point(770, 119);
+        flagNoteHeightLabel.Location = new Point(620, 153);
         flagNoteHeightLabel.Name = "flagNoteHeightLabel";
         flagNoteHeightLabel.Size = new Size(125, 15);
         flagNoteHeightLabel.TabIndex = 16;
@@ -502,7 +507,7 @@ partial class Form1
         flagNoteSpacingLabel.Font = new Font("Microsoft JhengHei UI", 9F);
         flagNoteSpacingLabel.Location = new Point(590, 119);
         flagNoteSpacingLabel.Name = "flagNoteSpacingLabel";
-        flagNoteSpacingLabel.Size = new Size(111, 15);
+        flagNoteSpacingLabel.Size = new Size(114, 15);
         flagNoteSpacingLabel.TabIndex = 17;
         flagNoteSpacingLabel.Text = "Flag Note頂部間距:";
         flagNoteSpacingLabel.Visible = false;
@@ -536,7 +541,7 @@ partial class Form1
         supplementalTextInput.Font = new Font("Microsoft JhengHei UI", 9F);
         supplementalTextInput.Location = new Point(90, 150);
         supplementalTextInput.Name = "supplementalTextInput";
-        supplementalTextInput.Size = new Size(600, 23);
+        supplementalTextInput.Size = new Size(520, 23);
         supplementalTextInput.TabIndex = 18;
         supplementalTextInput.Text = "* : One or more controls may have failed. Please use caution when interpreting results.";
         supplementalTextInput.Visible = false;
@@ -551,6 +556,18 @@ partial class Form1
         createPdfButton.Text = "建立 PDF";
         createPdfButton.UseVisualStyleBackColor = true;
         createPdfButton.Click += CreatePdfButton_Click;
+        // 
+        // previewPdfButton
+        // 
+        previewPdfButton.Font = new Font("Microsoft JhengHei UI", 10F, FontStyle.Bold);
+        previewPdfButton.ForeColor = Color.DarkBlue;
+        previewPdfButton.Location = new Point(460, 385);
+        previewPdfButton.Name = "previewPdfButton";
+        previewPdfButton.Size = new Size(100, 40);
+        previewPdfButton.TabIndex = 15;
+        previewPdfButton.Text = "預覽 PDF";
+        previewPdfButton.UseVisualStyleBackColor = true;
+        previewPdfButton.Click += PreviewPdfButton_Click;
         // 
         // exportPdfButton
         // 
@@ -613,41 +630,27 @@ partial class Form1
         contentEditGroup.Controls.Add(_panelKitInfo);
         contentEditGroup.Controls.Add(_editModeCombo);
         contentEditGroup.Controls.Add(editModeLabel);
-        //
+        contentEditGroup.Font = new Font("Microsoft JhengHei UI", 10F, FontStyle.Bold);
+        contentEditGroup.Location = new Point(20, 545);
+        contentEditGroup.Name = "contentEditGroup";
+        contentEditGroup.Size = new Size(770, 300);
+        contentEditGroup.TabIndex = 16;
+        contentEditGroup.TabStop = false;
+        contentEditGroup.Text = "報表內容編輯 (操作相關Block功能完成文件內容)";
+        // 
         // _panelIndvResultTable
-        //
+        // 
         _panelIndvResultTable.Controls.Add(drawIndvResultButton);
         _panelIndvResultTable.Controls.Add(loadIndvResultCsvButton);
         _panelIndvResultTable.Controls.Add(indvResultLabel);
         _panelIndvResultTable.Location = new Point(20, 70);
         _panelIndvResultTable.Name = "_panelIndvResultTable";
-        _panelIndvResultTable.Size = new Size(940, 210);
+        _panelIndvResultTable.Size = new Size(710, 210);
         _panelIndvResultTable.TabIndex = 14;
         _panelIndvResultTable.Visible = false;
-        //
-        // indvResultLabel
-        //
-        indvResultLabel.AutoSize = true;
-        indvResultLabel.Font = new Font("Microsoft JhengHei UI", 10F, FontStyle.Bold);
-        indvResultLabel.Location = new Point(10, 10);
-        indvResultLabel.Name = "indvResultLabel";
-        indvResultLabel.Size = new Size(320, 18);
-        indvResultLabel.TabIndex = 0;
-        indvResultLabel.Text = "繪製Individual INDV_RESULT_TABLE_5COL";
-        //
-        // loadIndvResultCsvButton
-        //
-        loadIndvResultCsvButton.Font = new Font("Microsoft JhengHei UI", 10F);
-        loadIndvResultCsvButton.Location = new Point(360, 10);
-        loadIndvResultCsvButton.Name = "loadIndvResultCsvButton";
-        loadIndvResultCsvButton.Size = new Size(100, 28);
-        loadIndvResultCsvButton.TabIndex = 1;
-        loadIndvResultCsvButton.Text = "載入 CSV";
-        loadIndvResultCsvButton.UseVisualStyleBackColor = true;
-        loadIndvResultCsvButton.Click += LoadIndvResultCsvButton_Click;
-        //
+        // 
         // drawIndvResultButton
-        //
+        // 
         drawIndvResultButton.Font = new Font("Microsoft JhengHei UI", 10F);
         drawIndvResultButton.Location = new Point(470, 10);
         drawIndvResultButton.Name = "drawIndvResultButton";
@@ -656,14 +659,27 @@ partial class Form1
         drawIndvResultButton.Text = "繪製";
         drawIndvResultButton.UseVisualStyleBackColor = true;
         drawIndvResultButton.Click += DrawIndvResultButton_Click;
-        //
-        contentEditGroup.Font = new Font("Microsoft JhengHei UI", 10F, FontStyle.Bold);
-        contentEditGroup.Location = new Point(20, 545);
-        contentEditGroup.Name = "contentEditGroup";
-        contentEditGroup.Size = new Size(945, 300);//954, 300
-        contentEditGroup.TabIndex = 16;
-        contentEditGroup.TabStop = false;
-        contentEditGroup.Text = "報表內容編輯 (操作相關Block功能完成文件內容)";
+        // 
+        // loadIndvResultCsvButton
+        // 
+        loadIndvResultCsvButton.Font = new Font("Microsoft JhengHei UI", 10F);
+        loadIndvResultCsvButton.Location = new Point(360, 10);
+        loadIndvResultCsvButton.Name = "loadIndvResultCsvButton";
+        loadIndvResultCsvButton.Size = new Size(100, 28);
+        loadIndvResultCsvButton.TabIndex = 1;
+        loadIndvResultCsvButton.Text = "載入 CSV";
+        loadIndvResultCsvButton.UseVisualStyleBackColor = true;
+        loadIndvResultCsvButton.Click += LoadIndvResultCsvButton_Click;
+        // 
+        // indvResultLabel
+        // 
+        indvResultLabel.AutoSize = true;
+        indvResultLabel.Font = new Font("Microsoft JhengHei UI", 10F, FontStyle.Bold);
+        indvResultLabel.Location = new Point(10, 10);
+        indvResultLabel.Name = "indvResultLabel";
+        indvResultLabel.Size = new Size(291, 18);
+        indvResultLabel.TabIndex = 0;
+        indvResultLabel.Text = "繪製Individual INDV_RESULT_TABLE_5COL";
         // 
         // _panelSampleControlTable
         // 
@@ -672,30 +688,9 @@ partial class Form1
         _panelSampleControlTable.Controls.Add(sampleControlLabel);
         _panelSampleControlTable.Location = new Point(20, 70);
         _panelSampleControlTable.Name = "_panelSampleControlTable";
-        _panelSampleControlTable.Size = new Size(940, 210);
+        _panelSampleControlTable.Size = new Size(710, 210);
         _panelSampleControlTable.TabIndex = 13;
         _panelSampleControlTable.Visible = false;
-        // 
-        // sampleControlLabel
-        // 
-        sampleControlLabel.AutoSize = true;
-        sampleControlLabel.Font = new Font("Microsoft JhengHei UI", 10F, FontStyle.Bold);
-        sampleControlLabel.Location = new Point(10, 10);
-        sampleControlLabel.Name = "sampleControlLabel";
-        sampleControlLabel.Size = new Size(220, 18);
-        sampleControlLabel.TabIndex = 0;
-        sampleControlLabel.Text = "繪製 INDV_CONTROL_TABLE";
-        // 
-        // loadSampleControlCsvButton
-        // 
-        loadSampleControlCsvButton.Font = new Font("Microsoft JhengHei UI", 10F);
-        loadSampleControlCsvButton.Location = new Point(290, 10);
-        loadSampleControlCsvButton.Name = "loadSampleControlCsvButton";
-        loadSampleControlCsvButton.Size = new Size(100, 28);
-        loadSampleControlCsvButton.TabIndex = 1;
-        loadSampleControlCsvButton.Text = "載入 CSV";
-        loadSampleControlCsvButton.UseVisualStyleBackColor = true;
-        loadSampleControlCsvButton.Click += LoadIndividualControlCsvButton_Click;
         // 
         // drawSampleControlButton
         // 
@@ -708,6 +703,27 @@ partial class Form1
         drawSampleControlButton.UseVisualStyleBackColor = true;
         drawSampleControlButton.Click += DrawIndividualControlButton_Click;
         // 
+        // loadSampleControlCsvButton
+        // 
+        loadSampleControlCsvButton.Font = new Font("Microsoft JhengHei UI", 10F);
+        loadSampleControlCsvButton.Location = new Point(290, 10);
+        loadSampleControlCsvButton.Name = "loadSampleControlCsvButton";
+        loadSampleControlCsvButton.Size = new Size(100, 28);
+        loadSampleControlCsvButton.TabIndex = 1;
+        loadSampleControlCsvButton.Text = "載入 CSV";
+        loadSampleControlCsvButton.UseVisualStyleBackColor = true;
+        loadSampleControlCsvButton.Click += LoadIndividualControlCsvButton_Click;
+        // 
+        // sampleControlLabel
+        // 
+        sampleControlLabel.AutoSize = true;
+        sampleControlLabel.Font = new Font("Microsoft JhengHei UI", 10F, FontStyle.Bold);
+        sampleControlLabel.Location = new Point(10, 10);
+        sampleControlLabel.Name = "sampleControlLabel";
+        sampleControlLabel.Size = new Size(198, 18);
+        sampleControlLabel.TabIndex = 0;
+        sampleControlLabel.Text = "繪製 INDV_CONTROL_TABLE";
+        // 
         // _panelWellInfo
         // 
         _panelWellInfo.Controls.Add(drawWellInfoButton);
@@ -715,30 +731,9 @@ partial class Form1
         _panelWellInfo.Controls.Add(wellInfoLabel);
         _panelWellInfo.Location = new Point(20, 70);
         _panelWellInfo.Name = "_panelWellInfo";
-        _panelWellInfo.Size = new Size(940, 210);
+        _panelWellInfo.Size = new Size(710, 210);
         _panelWellInfo.TabIndex = 12;
         _panelWellInfo.Visible = false;
-        // 
-        // wellInfoLabel
-        // 
-        wellInfoLabel.AutoSize = true;
-        wellInfoLabel.Font = new Font("Microsoft JhengHei UI", 10F, FontStyle.Bold);
-        wellInfoLabel.Location = new Point(10, 10);
-        wellInfoLabel.Name = "wellInfoLabel";
-        wellInfoLabel.Size = new Size(172, 18);
-        wellInfoLabel.TabIndex = 0;
-        wellInfoLabel.Text = "繪製 WELL_INFO_TABLE";
-        // 
-        // loadWellInfoCsvButton
-        // 
-        loadWellInfoCsvButton.Font = new Font("Microsoft JhengHei UI", 10F);
-        loadWellInfoCsvButton.Location = new Point(250, 10);
-        loadWellInfoCsvButton.Name = "loadWellInfoCsvButton";
-        loadWellInfoCsvButton.Size = new Size(100, 28);
-        loadWellInfoCsvButton.TabIndex = 1;
-        loadWellInfoCsvButton.Text = "載入 CSV";
-        loadWellInfoCsvButton.UseVisualStyleBackColor = true;
-        loadWellInfoCsvButton.Click += LoadWellInfoCsvButton_Click;
         // 
         // drawWellInfoButton
         // 
@@ -751,6 +746,27 @@ partial class Form1
         drawWellInfoButton.UseVisualStyleBackColor = true;
         drawWellInfoButton.Click += DrawWellInfoButton_Click;
         // 
+        // loadWellInfoCsvButton
+        // 
+        loadWellInfoCsvButton.Font = new Font("Microsoft JhengHei UI", 10F);
+        loadWellInfoCsvButton.Location = new Point(250, 10);
+        loadWellInfoCsvButton.Name = "loadWellInfoCsvButton";
+        loadWellInfoCsvButton.Size = new Size(100, 28);
+        loadWellInfoCsvButton.TabIndex = 1;
+        loadWellInfoCsvButton.Text = "載入 CSV";
+        loadWellInfoCsvButton.UseVisualStyleBackColor = true;
+        loadWellInfoCsvButton.Click += LoadWellInfoCsvButton_Click;
+        // 
+        // wellInfoLabel
+        // 
+        wellInfoLabel.AutoSize = true;
+        wellInfoLabel.Font = new Font("Microsoft JhengHei UI", 10F, FontStyle.Bold);
+        wellInfoLabel.Location = new Point(10, 10);
+        wellInfoLabel.Name = "wellInfoLabel";
+        wellInfoLabel.Size = new Size(166, 18);
+        wellInfoLabel.TabIndex = 0;
+        wellInfoLabel.Text = "繪製 WELL_INFO_TABLE";
+        // 
         // _panelSummaryTable
         // 
         _panelSummaryTable.Controls.Add(drawSummaryTableButton);
@@ -758,7 +774,7 @@ partial class Form1
         _panelSummaryTable.Controls.Add(summaryTableLabel);
         _panelSummaryTable.Location = new Point(20, 70);
         _panelSummaryTable.Name = "_panelSummaryTable";
-        _panelSummaryTable.Size = new Size(940, 210);
+        _panelSummaryTable.Size = new Size(710, 210);
         _panelSummaryTable.TabIndex = 11;
         _panelSummaryTable.Visible = false;
         // 
@@ -790,7 +806,7 @@ partial class Form1
         summaryTableLabel.Font = new Font("Microsoft JhengHei UI", 10F, FontStyle.Bold);
         summaryTableLabel.Location = new Point(10, 10);
         summaryTableLabel.Name = "summaryTableLabel";
-        summaryTableLabel.Size = new Size(198, 18);
+        summaryTableLabel.Size = new Size(261, 18);
         summaryTableLabel.TabIndex = 0;
         summaryTableLabel.Text = "繪製 SUMMARY_RESULT_TABLE_6COL";
         // 
@@ -800,7 +816,7 @@ partial class Form1
         _panelSignature.Controls.Add(signatureLabel);
         _panelSignature.Location = new Point(20, 70);
         _panelSignature.Name = "_panelSignature";
-        _panelSignature.Size = new Size(940, 210);
+        _panelSignature.Size = new Size(710, 210);
         _panelSignature.TabIndex = 10;
         _panelSignature.Visible = false;
         // 
@@ -832,7 +848,7 @@ partial class Form1
         _panelPcncDetailTable.Controls.Add(pcncDetailTableLabel);
         _panelPcncDetailTable.Location = new Point(20, 70);
         _panelPcncDetailTable.Name = "_panelPcncDetailTable";
-        _panelPcncDetailTable.Size = new Size(940, 210);
+        _panelPcncDetailTable.Size = new Size(710, 210);
         _panelPcncDetailTable.TabIndex = 9;
         _panelPcncDetailTable.Visible = false;
         // 
@@ -875,7 +891,7 @@ partial class Form1
         _panelPcncTable.Controls.Add(pcncTableLabel);
         _panelPcncTable.Location = new Point(20, 70);
         _panelPcncTable.Name = "_panelPcncTable";
-        _panelPcncTable.Size = new Size(940, 210);
+        _panelPcncTable.Size = new Size(710, 210);
         _panelPcncTable.TabIndex = 8;
         _panelPcncTable.Visible = false;
         // 
@@ -907,7 +923,7 @@ partial class Form1
         pcncTableLabel.Font = new Font("Microsoft JhengHei UI", 10F, FontStyle.Bold);
         pcncTableLabel.Location = new Point(10, 10);
         pcncTableLabel.Name = "pcncTableLabel";
-        pcncTableLabel.Size = new Size(198, 18);
+        pcncTableLabel.Size = new Size(126, 18);
         pcncTableLabel.TabIndex = 0;
         pcncTableLabel.Text = "加入 PC/NC Table";
         // 
@@ -918,7 +934,7 @@ partial class Form1
         _panelPcncNote.Controls.Add(pcncLabel);
         _panelPcncNote.Location = new Point(20, 70);
         _panelPcncNote.Name = "_panelPcncNote";
-        _panelPcncNote.Size = new Size(940, 210);
+        _panelPcncNote.Size = new Size(710, 210);
         _panelPcncNote.TabIndex = 7;
         _panelPcncNote.Visible = false;
         // 
@@ -950,7 +966,7 @@ partial class Form1
         pcncLabel.Font = new Font("Microsoft JhengHei UI", 10F, FontStyle.Bold);
         pcncLabel.Location = new Point(10, 10);
         pcncLabel.Name = "pcncLabel";
-        pcncLabel.Size = new Size(117, 18);
+        pcncLabel.Size = new Size(145, 18);
         pcncLabel.TabIndex = 0;
         pcncLabel.Text = "加入 PC/NC Flag List";
         // 
@@ -963,7 +979,7 @@ partial class Form1
         _panelMultiColor.Controls.Add(multiColorLabel);
         _panelMultiColor.Location = new Point(20, 70);
         _panelMultiColor.Name = "_panelMultiColor";
-        _panelMultiColor.Size = new Size(940, 210);
+        _panelMultiColor.Size = new Size(710, 210);
         _panelMultiColor.TabIndex = 6;
         _panelMultiColor.Visible = false;
         // 
@@ -1025,7 +1041,7 @@ partial class Form1
         _panelSpacing.Controls.Add(spacingLabel1);
         _panelSpacing.Location = new Point(20, 70);
         _panelSpacing.Name = "_panelSpacing";
-        _panelSpacing.Size = new Size(940, 210);
+        _panelSpacing.Size = new Size(710, 210);
         _panelSpacing.TabIndex = 5;
         _panelSpacing.Visible = false;
         // 
@@ -1077,7 +1093,7 @@ partial class Form1
         _panelPageBreak.Controls.Add(pageBreakLabel);
         _panelPageBreak.Location = new Point(20, 70);
         _panelPageBreak.Name = "_panelPageBreak";
-        _panelPageBreak.Size = new Size(940, 210);
+        _panelPageBreak.Size = new Size(710, 210);
         _panelPageBreak.TabIndex = 4;
         _panelPageBreak.Visible = false;
         // 
@@ -1117,7 +1133,7 @@ partial class Form1
         _panelLine.Controls.Add(lineLabel);
         _panelLine.Location = new Point(20, 70);
         _panelLine.Name = "_panelLine";
-        _panelLine.Size = new Size(940, 210);
+        _panelLine.Size = new Size(710, 210);
         _panelLine.TabIndex = 3;
         _panelLine.Visible = false;
         // 
@@ -1245,7 +1261,7 @@ partial class Form1
         _panelKitInfo.Controls.Add(kitInfoLabel);
         _panelKitInfo.Location = new Point(20, 70);
         _panelKitInfo.Name = "_panelKitInfo";
-        _panelKitInfo.Size = new Size(940, 210);
+        _panelKitInfo.Size = new Size(710, 210);
         _panelKitInfo.TabIndex = 2;
         _panelKitInfo.Visible = false;
         // 
@@ -1324,6 +1340,28 @@ partial class Form1
         editModeLabel.TabIndex = 0;
         editModeLabel.Text = "編輯模式:";
         // 
+        // _pdfPreviewGroup
+        // 
+        _pdfPreviewGroup.Anchor = AnchorStyles.Top | AnchorStyles.Bottom | AnchorStyles.Left | AnchorStyles.Right;
+        _pdfPreviewGroup.Controls.Add(_flexViewer);
+        _pdfPreviewGroup.Font = new Font("Microsoft JhengHei UI", 10F, FontStyle.Bold);
+        _pdfPreviewGroup.Location = new Point(780, 20);
+        _pdfPreviewGroup.Name = "_pdfPreviewGroup";
+        _pdfPreviewGroup.Size = new Size(600, 935);
+        _pdfPreviewGroup.TabIndex = 17;
+        _pdfPreviewGroup.TabStop = false;
+        _pdfPreviewGroup.Text = "PDF 即時預覽";
+        // 
+        // _flexViewer
+        // 
+        _flexViewer.AutoScrollMargin = new Size(0, 0);
+        _flexViewer.AutoScrollMinSize = new Size(0, 0);
+        _flexViewer.Dock = DockStyle.Fill;
+        _flexViewer.Location = new Point(3, 20);
+        _flexViewer.Name = "_flexViewer";
+        _flexViewer.Size = new Size(594, 912);
+        _flexViewer.TabIndex = 0;
+        // 
         // _positionInfoLabel
         // 
         _positionInfoLabel.BackColor = SystemColors.Control;
@@ -1334,7 +1372,7 @@ partial class Form1
         _positionInfoLabel.Multiline = true;
         _positionInfoLabel.Name = "_positionInfoLabel";
         _positionInfoLabel.ReadOnly = true;
-        _positionInfoLabel.Size = new Size(960, 85);
+        _positionInfoLabel.Size = new Size(740, 85);
         _positionInfoLabel.TabIndex = 17;
         _positionInfoLabel.Text = "CurrentX: -- | CurrentY: -- | TotalPages: -- | CurrentPage: -- | Header: -- | Footer: --";
         // 
@@ -1343,8 +1381,10 @@ partial class Form1
         AutoScaleDimensions = new SizeF(7F, 15F);
         AutoScaleMode = AutoScaleMode.Font;
         AutoScroll = true;
-        AutoScrollMinSize = new Size(994, 951);
-        ClientSize = new Size(994, 951);
+        AutoScrollMinSize = new Size(1404, 961);
+        ClientSize = new Size(1404, 961);
+        Controls.Add(_pdfPreviewGroup);
+        Controls.Add(previewPdfButton);
         Controls.Add(_positionInfoLabel);
         Controls.Add(contentEditGroup);
         Controls.Add(statusList);
@@ -1356,7 +1396,6 @@ partial class Form1
         Controls.Add(marginGroup);
         Controls.Add(descLabel);
         Controls.Add(titleLabel);
-        FormBorderStyle = FormBorderStyle.Sizable;
         Name = "Form1";
         StartPosition = FormStartPosition.CenterScreen;
         Text = "PlexReportII GUI";
@@ -1368,10 +1407,16 @@ partial class Form1
         headerFooterGroup.PerformLayout();
         contentEditGroup.ResumeLayout(false);
         contentEditGroup.PerformLayout();
-        _panelSignature.ResumeLayout(false);
-        _panelSignature.PerformLayout();
+        _panelIndvResultTable.ResumeLayout(false);
+        _panelIndvResultTable.PerformLayout();
+        _panelSampleControlTable.ResumeLayout(false);
+        _panelSampleControlTable.PerformLayout();
+        _panelWellInfo.ResumeLayout(false);
+        _panelWellInfo.PerformLayout();
         _panelSummaryTable.ResumeLayout(false);
         _panelSummaryTable.PerformLayout();
+        _panelSignature.ResumeLayout(false);
+        _panelSignature.PerformLayout();
         _panelPcncDetailTable.ResumeLayout(false);
         _panelPcncDetailTable.PerformLayout();
         _panelPcncTable.ResumeLayout(false);
@@ -1389,6 +1434,8 @@ partial class Form1
         ((System.ComponentModel.ISupportInitialize)_lineStartXInput).EndInit();
         _panelKitInfo.ResumeLayout(false);
         _panelKitInfo.PerformLayout();
+        _pdfPreviewGroup.ResumeLayout(false);
+        ((System.ComponentModel.ISupportInitialize)_flexViewer).EndInit();
         ResumeLayout(false);
         PerformLayout();
 
@@ -1431,6 +1478,9 @@ partial class Form1
         private System.Windows.Forms.Label supplementalTextLabel;
         private System.Windows.Forms.TextBox supplementalTextInput;
         private System.Windows.Forms.Button createPdfButton;
+    private System.Windows.Forms.Button previewPdfButton;
+    private System.Windows.Forms.GroupBox _pdfPreviewGroup;
+    private C1.Win.FlexViewer.C1FlexViewer _flexViewer;
     private System.Windows.Forms.Button exportPdfButton;
     private System.Windows.Forms.Button openFolderButton;
     private System.Windows.Forms.Button clearPdfButton;
