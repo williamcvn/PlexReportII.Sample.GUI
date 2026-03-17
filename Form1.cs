@@ -92,6 +92,7 @@ namespace PlexReportII.Sample.GUI
                     
                     UpdatePositionInfo();
                     AddStatusMessage($"已繪製多色段落 (Outline: {outline}, LinkTarget: {linkTarget})");
+                    RefreshPreview();
                 }
             }
             catch (Exception ex)
@@ -297,6 +298,7 @@ namespace PlexReportII.Sample.GUI
                 
                 UpdatePositionInfo();
                 AddStatusMessage("PC/NC 註解已繪製");
+                RefreshPreview();
             }
             catch (Exception ex)
             {
@@ -410,6 +412,7 @@ namespace PlexReportII.Sample.GUI
                 
                 UpdatePositionInfo();
                 AddStatusMessage("PC/NC Table 已繪製");
+                RefreshPreview();
             }
             catch (Exception ex)
             {
@@ -518,6 +521,7 @@ namespace PlexReportII.Sample.GUI
 
                 UpdatePositionInfo();
                 AddStatusMessage($"PC/NC Detail Table 已繪製 ({_pcncDetailData.Count} 筆資料)");
+                RefreshPreview();
             }
             catch (Exception ex)
             {
@@ -541,6 +545,7 @@ namespace PlexReportII.Sample.GUI
 
                 UpdatePositionInfo();
                 AddStatusMessage("已繪製簽名區");
+                RefreshPreview();
             }
             catch (Exception ex)
             {
@@ -694,6 +699,10 @@ namespace PlexReportII.Sample.GUI
                 UpdatePositionInfo();
 
                 AddStatusMessage("PDF 文件已建立並初始化完成");
+
+                // 即時預覽（顯示含 Header/Footer 的空白頁面）
+                RefreshPreview();
+
                 MessageBox.Show("PDF 已在記憶體中建立完成！\n\n您可以按「輸出 PDF」將其儲存為檔案。", "成功",
                     MessageBoxButtons.OK, MessageBoxIcon.Information);
             }
@@ -708,80 +717,72 @@ namespace PlexReportII.Sample.GUI
 
         private void PreviewPdfButton_Click(object? sender, EventArgs e)
         {
+            RefreshPreview();
+        }
+
+        /// <summary>
+        /// 即時重新產生預覽。建立暫存 SampleReport 重播所有操作後匯出至 FlexViewer。
+        /// 原始 _currentReport 完全不受影響。
+        /// </summary>
+        private void RefreshPreview()
+        {
+            if (_currentReport == null)
+            {
+                return;
+            }
+
+            string tempPath = Path.Combine(Path.GetTempPath(), $"PlexReport_Preview_{Guid.NewGuid():N}.pdf");
+
             try
             {
-                if (_currentReport == null)
+                using (SampleReport tempReport = new SampleReport(_logger))
                 {
-                    MessageBox.Show("請先按「建立 PDF」建立文件後，才能進行預覽。", "警告",
-                        MessageBoxButtons.OK, MessageBoxIcon.Warning);
-                    return;
-                }
+                    // 套用與原始報表相同的 Header/Footer 設定
+                    ApplyHeaderFooterSettings(tempReport);
 
-                if (_reportActions.Count == 0)
-                {
-                    MessageBox.Show("目前沒有任何繪圖操作可預覽。請先繪製內容。", "提示",
-                        MessageBoxButtons.OK, MessageBoxIcon.Information);
-                    return;
-                }
+                    // 初始化暫存報表
+                    tempReport.InitializeInMemory();
 
-                AddStatusMessage("正在產生預覽...");
+                    // 套用相同的全域設定
+                    tempReport.AllowCopyContent = _currentReport.AllowCopyContent;
+                    tempReport.FlagNoteSpacing = _currentReport.FlagNoteSpacing;
 
-                // 建立暫存 SampleReport 並重播所有操作
-                string tempPath = Path.Combine(Path.GetTempPath(), $"PlexReport_Preview_{Guid.NewGuid():N}.pdf");
-
-                try
-                {
-                    using (SampleReport tempReport = new SampleReport(_logger))
+                    // 重播所有繪圖操作
+                    foreach (var action in _reportActions)
                     {
-                        // 套用與原始報表相同的 Header/Footer 設定
-                        ApplyHeaderFooterSettings(tempReport);
-
-                        // 初始化暫存報表
-                        tempReport.InitializeInMemory();
-
-                        // 套用相同的全域設定
-                        tempReport.AllowCopyContent = _currentReport.AllowCopyContent;
-                        tempReport.FlagNoteSpacing = _currentReport.FlagNoteSpacing;
-
-                        // 重播所有繪圖操作
-                        foreach (var action in _reportActions)
-                        {
-                            action(tempReport);
-                        }
-
-                        // 匯出暫存報表至檔案 (含 Header/Footer)
-                        tempReport.ExportToFile(tempPath);
+                        action(tempReport);
                     }
 
-                    // 讀取暫存檔案並載入至 FlexViewer
-                    byte[] pdfBytes = File.ReadAllBytes(tempPath);
-                    MemoryStream ms = new MemoryStream(pdfBytes);
-
-                    var pdfSource = new C1PdfDocumentSource();
-                    pdfSource.LoadFromStream(ms);
-                    _flexViewer.DocumentSource = pdfSource;
-
-                    AddStatusMessage($"預覽 PDF 成功 (共重播 {_reportActions.Count} 個操作)");
+                    // 匯出暫存報表至檔案 (含 Header/Footer)
+                    tempReport.ExportToFile(tempPath);
                 }
-                finally
-                {
-                    // 清理暫存檔案
-                    try
-                    {
-                        if (File.Exists(tempPath))
-                        {
-                            File.Delete(tempPath);
-                        }
-                    }
-                    catch { /* 忽略清理錯誤 */ }
-                }
+
+                // 讀取暫存檔案並載入至 FlexViewer
+                byte[] pdfBytes = File.ReadAllBytes(tempPath);
+                MemoryStream ms = new MemoryStream(pdfBytes);
+
+                var pdfSource = new C1PdfDocumentSource();
+                pdfSource.LoadFromStream(ms);
+                _flexViewer.DocumentSource = pdfSource;
+
+                AddStatusMessage($"預覽已更新 (共 {_reportActions.Count} 個操作)");
             }
             catch (Exception ex)
             {
-                _logger.Error("預覽 PDF 失敗", ex);
-                AddStatusMessage($"錯誤: {ex.Message}");
-                MessageBox.Show($"預覽 PDF 時發生錯誤：\n{ex.Message}", "錯誤",
-                    MessageBoxButtons.OK, MessageBoxIcon.Error);
+                _logger.Error("即時預覽失敗", ex);
+                AddStatusMessage($"預覽錯誤: {ex.Message}");
+            }
+            finally
+            {
+                // 清理暫存檔案
+                try
+                {
+                    if (File.Exists(tempPath))
+                    {
+                        File.Delete(tempPath);
+                    }
+                }
+                catch { /* 忽略清理錯誤 */ }
             }
         }
 
@@ -963,6 +964,7 @@ namespace PlexReportII.Sample.GUI
                 _reportActions.Add(r => r.DrawKitInfoTableWithStyle(kitDataCopy, methodCopy, styleCopy));
                 UpdatePositionInfo();
                 AddStatusMessage($"Kit Info 已繪製 [{selectedMethod}|{selectedStyle}] (x: {rect.X:F0}, y: {rect.Y:F0}, w: {rect.Width:F0}, h: {rect.Height:F0})");
+                RefreshPreview();
             }
             catch (Exception ex)
             {
@@ -1036,6 +1038,7 @@ namespace PlexReportII.Sample.GUI
                 // 詳細日誌顯示於 listBox
                 string logMsg = $"[水平線] Y:{y:F0}, X:{x:F0}, 長度:{length:F0}, 顏色:{colorName}, 粗細:{thickness:F1}, 間距:{spacing:F0}";
                 AddStatusMessage(logMsg);
+                RefreshPreview();
             }
             catch (Exception ex)
             {
@@ -1061,6 +1064,7 @@ namespace PlexReportII.Sample.GUI
                 _reportActions.Add(r => r.PageBreak());
                 UpdatePositionInfo();
                 AddStatusMessage($"已執行換頁。目前頁數: {_currentReport.PageCount}");
+                RefreshPreview();
             }
             catch (Exception ex)
             {
@@ -1100,6 +1104,7 @@ namespace PlexReportII.Sample.GUI
                 
                 // 更新狀態
                 AddStatusMessage($"已插入垂直間隔: {height} pt。目前頁數: {_currentReport.PageCount}");
+                RefreshPreview();
             }
             catch (Exception ex)
             {
@@ -1537,6 +1542,7 @@ namespace PlexReportII.Sample.GUI
                     flagNoteFlagCopy));
 
                 AddStatusMessage($"Summary Result Table 繪製完成 (共 {_summaryResultData.Count} 筆資料)");
+                RefreshPreview();
             }
             catch (Exception ex)
             {
@@ -1625,6 +1631,7 @@ namespace PlexReportII.Sample.GUI
 
                 UpdatePositionInfo();
                 AddStatusMessage($"Well Info Table 繪製完成 (共 {_wellInfoData.Count} 筆資料)");
+                RefreshPreview();
             }
             catch (Exception ex)
             {
@@ -1696,6 +1703,7 @@ namespace PlexReportII.Sample.GUI
 
                 UpdatePositionInfo();
                 AddStatusMessage($"Sample Control Table 繪製完成 (共 {_sampleControlData.Count - 1} 筆資料)");
+                RefreshPreview();
             }
             catch (Exception ex)
             {
@@ -1769,6 +1777,7 @@ namespace PlexReportII.Sample.GUI
 
                 UpdatePositionInfo();
                 AddStatusMessage($"Individual Result Table 繪製完成 (共 {_indvResultData.Count - 1} 筆資料)");
+                RefreshPreview();
             }
             catch (Exception ex)
             {
