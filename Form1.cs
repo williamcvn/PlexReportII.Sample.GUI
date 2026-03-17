@@ -791,7 +791,7 @@ namespace PlexReportII.Sample.GUI
             try
             {
                 // 檢查是否有 PDF 在記憶體中
-                if (_currentReport == null || !_currentReport.IsPdfInitialized)
+                if (_currentReport == null)
                 {
                     MessageBox.Show("請先按「建立 PDF」在記憶體中建立 PDF 文件。", "警告",
                         MessageBoxButtons.OK, MessageBoxIcon.Warning);
@@ -806,11 +806,26 @@ namespace PlexReportII.Sample.GUI
                 string fileName = $"output_{DateTime.Now:yyyyMMdd_HHmmss}.pdf";
                 string outputPath = Path.Combine(pdfFolder, fileName);
 
-                // 輸出檔案
-                _currentReport.ExportToFile(outputPath);
+                // 使用重播機制匯出，確保最新的 Header/Footer 設定（含 Logo）皆有套用
+                using (SampleReport exportReport = new SampleReport(_logger))
+                {
+                    ApplyHeaderFooterSettings(exportReport);
+                    exportReport.InitializeInMemory();
+                    exportReport.AllowCopyContent = _currentReport.AllowCopyContent;
+                    exportReport.FlagNoteSpacing = _currentReport.FlagNoteSpacing;
+
+                    // 重播所有繪圖操作
+                    foreach (var action in _reportActions)
+                    {
+                        action(exportReport);
+                    }
+
+                    // 匯出至檔案 (含 Header/Footer)
+                    exportReport.ExportToFile(outputPath);
+                }
 
                 AddStatusMessage($"PDF 已輸出: {fileName}");
-                MessageBox.Show($"PDF 已成功輸出！\n\n路徑: {outputPath}\n\n注意：PDF 匯出後會自動封裝，若要繼續繪圖請先按「建立 PDF」。", "成功",
+                MessageBox.Show($"PDF 已成功輸出！\n\n路徑: {outputPath}", "成功",
                     MessageBoxButtons.OK, MessageBoxIcon.Information);
             }
             catch (Exception ex)
