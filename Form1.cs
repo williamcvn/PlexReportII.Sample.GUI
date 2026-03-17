@@ -5,6 +5,7 @@
 using System;
 using System.Diagnostics;
 using System.IO;
+using System.Linq;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 using PlexReportII.Reports;
@@ -36,6 +37,11 @@ namespace PlexReportII.Sample.GUI
         private List<WellInfoItem> _wellInfoData = new List<WellInfoItem>();
         private List<List<string>> _sampleControlData = new List<List<string>>();
         private List<List<string>> _indvResultData = new List<List<string>>();
+
+        /// <summary>
+        /// 記錄所有繪圖操作的 Action 委派清單，供無損預覽重播使用。
+        /// </summary>
+        private List<Action<SampleReport>> _reportActions = new List<Action<SampleReport>>();
 
 
         /// <summary>
@@ -76,7 +82,13 @@ namespace PlexReportII.Sample.GUI
                     bool outline = outlineCheck.Checked;
                     bool linkTarget = linkTargetCheck.Checked;
 
-                    _currentReport.DrawMultiColorParagraph(_multiColorInput.Text, outline, linkTarget);
+                    // 快取參數值供重播使用
+                    string textCopy = _multiColorInput.Text;
+                    bool outlineCopy = outline;
+                    bool linkTargetCopy = linkTarget;
+
+                    _currentReport.DrawMultiColorParagraph(textCopy, outlineCopy, linkTargetCopy);
+                    _reportActions.Add(r => r.DrawMultiColorParagraph(textCopy, outlineCopy, linkTargetCopy));
                     
                     UpdatePositionInfo();
                     AddStatusMessage($"已繪製多色段落 (Outline: {outline}, LinkTarget: {linkTarget})");
@@ -279,7 +291,9 @@ namespace PlexReportII.Sample.GUI
                     return;
                 }
 
-                _currentReport.DrawPcncNote(_pcncData);
+                var pcncDataCopy = new List<PcncLegendItem>(_pcncData);
+                _currentReport.DrawPcncNote(pcncDataCopy);
+                _reportActions.Add(r => r.DrawPcncNote(pcncDataCopy));
                 
                 UpdatePositionInfo();
                 AddStatusMessage("PC/NC 註解已繪製");
@@ -390,7 +404,9 @@ namespace PlexReportII.Sample.GUI
                     return;
                 }
 
-                _currentReport.DrawPcncTable(_pcncTableData);
+                var pcncTableDataCopy = new List<PcncTableItem>(_pcncTableData);
+                _currentReport.DrawPcncTable(pcncTableDataCopy);
+                _reportActions.Add(r => r.DrawPcncTable(pcncTableDataCopy));
                 
                 UpdatePositionInfo();
                 AddStatusMessage("PC/NC Table 已繪製");
@@ -495,7 +511,10 @@ namespace PlexReportII.Sample.GUI
                     RedrawHeaderOnNewPage = true,
                 };
 
-                _currentReport.DrawPcncDetailTable(_pcncDetailData, style);
+                var pcncDetailDataCopy = new List<PcncDetailItem>(_pcncDetailData);
+                var styleCopy = style;
+                _currentReport.DrawPcncDetailTable(pcncDetailDataCopy, styleCopy);
+                _reportActions.Add(r => r.DrawPcncDetailTable(pcncDetailDataCopy, styleCopy));
 
                 UpdatePositionInfo();
                 AddStatusMessage($"PC/NC Detail Table 已繪製 ({_pcncDetailData.Count} 筆資料)");
@@ -518,6 +537,7 @@ namespace PlexReportII.Sample.GUI
                 }
 
                 _currentReport.DrawSignatureArea();
+                _reportActions.Add(r => r.DrawSignatureArea());
 
                 UpdatePositionInfo();
                 AddStatusMessage("已繪製簽名區");
@@ -690,24 +710,71 @@ namespace PlexReportII.Sample.GUI
         {
             try
             {
-                if (_currentReport == null || !_currentReport.IsPdfInitialized)
+                if (_currentReport == null)
                 {
                     MessageBox.Show("請先按「建立 PDF」建立文件後，才能進行預覽。", "警告",
                         MessageBoxButtons.OK, MessageBoxIcon.Warning);
                     return;
                 }
 
-                // 產出 PDF 串流
-                MemoryStream ms = _currentReport.ExportToStream();
+                if (_reportActions.Count == 0)
+                {
+                    MessageBox.Show("目前沒有任何繪圖操作可預覽。請先繪製內容。", "提示",
+                        MessageBoxButtons.OK, MessageBoxIcon.Information);
+                    return;
+                }
 
-                // 使用 C1PdfDocumentSource 讀取串流
-                var pdfSource = new C1PdfDocumentSource();
-                pdfSource.LoadFromStream(ms);
-                
-                // 載入至 FlexViewer
-                _flexViewer.DocumentSource = pdfSource;
+                AddStatusMessage("正在產生預覽...");
 
-                AddStatusMessage("預覽 PDF 成功");
+                // 建立暫存 SampleReport 並重播所有操作
+                string tempPath = Path.Combine(Path.GetTempPath(), $"PlexReport_Preview_{Guid.NewGuid():N}.pdf");
+
+                try
+                {
+                    using (SampleReport tempReport = new SampleReport(_logger))
+                    {
+                        // 套用與原始報表相同的 Header/Footer 設定
+                        ApplyHeaderFooterSettings(tempReport);
+
+                        // 初始化暫存報表
+                        tempReport.InitializeInMemory();
+
+                        // 套用相同的全域設定
+                        tempReport.AllowCopyContent = _currentReport.AllowCopyContent;
+                        tempReport.FlagNoteSpacing = _currentReport.FlagNoteSpacing;
+
+                        // 重播所有繪圖操作
+                        foreach (var action in _reportActions)
+                        {
+                            action(tempReport);
+                        }
+
+                        // 匯出暫存報表至檔案 (含 Header/Footer)
+                        tempReport.ExportToFile(tempPath);
+                    }
+
+                    // 讀取暫存檔案並載入至 FlexViewer
+                    byte[] pdfBytes = File.ReadAllBytes(tempPath);
+                    MemoryStream ms = new MemoryStream(pdfBytes);
+
+                    var pdfSource = new C1PdfDocumentSource();
+                    pdfSource.LoadFromStream(ms);
+                    _flexViewer.DocumentSource = pdfSource;
+
+                    AddStatusMessage($"預覽 PDF 成功 (共重播 {_reportActions.Count} 個操作)");
+                }
+                finally
+                {
+                    // 清理暫存檔案
+                    try
+                    {
+                        if (File.Exists(tempPath))
+                        {
+                            File.Delete(tempPath);
+                        }
+                    }
+                    catch { /* 忽略清理錯誤 */ }
+                }
             }
             catch (Exception ex)
             {
@@ -760,7 +827,12 @@ namespace PlexReportII.Sample.GUI
             {
                 _currentReport.Dispose();
                 _currentReport = null;
-                AddStatusMessage("已釋放 PDF 物件記憶體");
+                _reportActions.Clear();
+
+                // 清除預覽面板
+                _flexViewer.DocumentSource = null;
+
+                AddStatusMessage("已釋放 PDF 物件記憶體 (繪圖操作紀錄已清除)");
                 
                 // 重設位置資訊
                 if (_positionInfoLabel != null)
@@ -883,7 +955,12 @@ namespace PlexReportII.Sample.GUI
                 string selectedMethod = _renderMethodCombo?.SelectedItem?.ToString() ?? "RenderTable_V1";
                 string selectedStyle = _tableStyleCombo?.SelectedItem?.ToString() ?? "TbSetting1";
 
-                RectangleF rect = _currentReport.DrawKitInfoTableWithStyle(_kitInfoData, selectedMethod, selectedStyle);
+                var kitDataCopy = _kitInfoData!.Copy();
+                string methodCopy = selectedMethod;
+                string styleCopy = selectedStyle;
+
+                RectangleF rect = _currentReport.DrawKitInfoTableWithStyle(kitDataCopy, methodCopy, styleCopy);
+                _reportActions.Add(r => r.DrawKitInfoTableWithStyle(kitDataCopy, methodCopy, styleCopy));
                 UpdatePositionInfo();
                 AddStatusMessage($"Kit Info 已繪製 [{selectedMethod}|{selectedStyle}] (x: {rect.X:F0}, y: {rect.Y:F0}, w: {rect.Width:F0}, h: {rect.Height:F0})");
             }
@@ -931,14 +1008,28 @@ namespace PlexReportII.Sample.GUI
                     return;
                 }
 
+                // 快取參數供重播
+                Color colorCopy = color;
+                float xCopy = x;
+                float lengthCopy = length;
+                float thicknessCopy = thickness;
+                float spacingCopy = spacing;
+
                 // 執行繪製
                 float y = _currentReport.DrawHorizontalLine(
-                    lineColor: color,
-                    lineWidth: thickness,
-                    addSpacingAfter: spacing,
-                    x: x,
-                    length: length
+                    lineColor: colorCopy,
+                    lineWidth: thicknessCopy,
+                    addSpacingAfter: spacingCopy,
+                    x: xCopy,
+                    length: lengthCopy
                 );
+                _reportActions.Add(r => r.DrawHorizontalLine(
+                    lineColor: colorCopy,
+                    lineWidth: thicknessCopy,
+                    addSpacingAfter: spacingCopy,
+                    x: xCopy,
+                    length: lengthCopy
+                ));
 
                 UpdatePositionInfo();
 
@@ -967,6 +1058,7 @@ namespace PlexReportII.Sample.GUI
             try
             {
                 _currentReport.PageBreak();
+                _reportActions.Add(r => r.PageBreak());
                 UpdatePositionInfo();
                 AddStatusMessage($"已執行換頁。目前頁數: {_currentReport.PageCount}");
             }
@@ -1000,7 +1092,9 @@ namespace PlexReportII.Sample.GUI
             try
             {
                 // 執行插入間隔 (內部已包含自動換頁檢查)
-                _currentReport.AddVerticalSpacing(height);
+                float heightCopy = height;
+                _currentReport.AddVerticalSpacing(heightCopy);
+                _reportActions.Add(r => r.AddVerticalSpacing(heightCopy));
                 
                 UpdatePositionInfo();
                 
@@ -1426,11 +1520,21 @@ namespace PlexReportII.Sample.GUI
                 bool shouldDrawFlagNote = (suppCheck != null && suppCheck.Checked) || (aboveCheck != null && aboveCheck.Checked);
                 string? supplementalText = (suppCheck != null && suppCheck.Checked && textInput != null) ? textInput.Text : null;
 
+                var summaryDataCopy = _summaryResultData.Select(r => new List<string>(r)).ToList();
+                var flagNoteCopy = shouldDrawFlagNote ? new List<string>(_flagNoteData) : null;
+                string? suppTextCopy = supplementalText;
+                bool flagNoteFlagCopy = shouldDrawFlagNote;
+
                 _currentReport.DrawSummaryResult6ColumnTable(
-                    _summaryResultData,
-                    shouldDrawFlagNote ? _flagNoteData : null,
-                    supplementalText,
-                    shouldDrawFlagNote);
+                    summaryDataCopy,
+                    flagNoteCopy,
+                    suppTextCopy,
+                    flagNoteFlagCopy);
+                _reportActions.Add(r => r.DrawSummaryResult6ColumnTable(
+                    summaryDataCopy,
+                    flagNoteCopy,
+                    suppTextCopy,
+                    flagNoteFlagCopy));
 
                 AddStatusMessage($"Summary Result Table 繪製完成 (共 {_summaryResultData.Count} 筆資料)");
             }
@@ -1515,7 +1619,9 @@ namespace PlexReportII.Sample.GUI
                     return;
                 }
 
-                _currentReport.DrawWellInfoTable(_wellInfoData);
+                var wellInfoCopy = new List<WellInfoItem>(_wellInfoData);
+                _currentReport.DrawWellInfoTable(wellInfoCopy);
+                _reportActions.Add(r => r.DrawWellInfoTable(wellInfoCopy));
 
                 UpdatePositionInfo();
                 AddStatusMessage($"Well Info Table 繪製完成 (共 {_wellInfoData.Count} 筆資料)");
@@ -1584,7 +1690,9 @@ namespace PlexReportII.Sample.GUI
                     return;
                 }
 
-                _currentReport.DrawSampleControlTable(_sampleControlData);
+                var sampleCtrlCopy = _sampleControlData.Select(r => new List<string>(r)).ToList();
+                _currentReport.DrawSampleControlTable(sampleCtrlCopy);
+                _reportActions.Add(r => r.DrawSampleControlTable(sampleCtrlCopy));
 
                 UpdatePositionInfo();
                 AddStatusMessage($"Sample Control Table 繪製完成 (共 {_sampleControlData.Count - 1} 筆資料)");
@@ -1655,7 +1763,9 @@ namespace PlexReportII.Sample.GUI
                     return;
                 }
 
-                _currentReport.DrawIndividualResultTable5Col(_indvResultData);
+                var indvResultCopy = _indvResultData.Select(r => new List<string>(r)).ToList();
+                _currentReport.DrawIndividualResultTable5Col(indvResultCopy);
+                _reportActions.Add(r => r.DrawIndividualResultTable5Col(indvResultCopy));
 
                 UpdatePositionInfo();
                 AddStatusMessage($"Individual Result Table 繪製完成 (共 {_indvResultData.Count - 1} 筆資料)");
