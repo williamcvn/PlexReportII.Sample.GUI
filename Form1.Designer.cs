@@ -53,6 +53,7 @@ partial class Form1
         supplementalTextLabel = new Label();
         supplementalTextInput = new TextBox();
         createPdfButton = new Button();
+        showPreviewMarkersCheck = new CheckBox();
         exportPdfButton = new Button();
         openFolderButton = new Button();
         clearPdfButton = new Button();
@@ -567,6 +568,19 @@ partial class Form1
         createPdfButton.Text = "建立 PDF";
         createPdfButton.UseVisualStyleBackColor = true;
         createPdfButton.Click += CreatePdfButton_Click;
+        // 
+        // showPreviewMarkersCheck
+        // 
+        showPreviewMarkersCheck.AutoSize = true;
+        showPreviewMarkersCheck.Checked = true;
+        showPreviewMarkersCheck.Font = new Font("Microsoft JhengHei UI", 9F);
+        showPreviewMarkersCheck.Location = new Point(460, 398);
+        showPreviewMarkersCheck.Name = "showPreviewMarkersCheck";
+        showPreviewMarkersCheck.Size = new Size(180, 19);
+        showPreviewMarkersCheck.TabIndex = 20;
+        showPreviewMarkersCheck.Text = "顯示預覽標記 (Y軸/邊界)";
+        showPreviewMarkersCheck.UseVisualStyleBackColor = true;
+        showPreviewMarkersCheck.CheckedChanged += ShowPreviewMarkersCheck_Changed;
         // 
         // exportPdfButton
         // 
@@ -1383,6 +1397,7 @@ partial class Form1
         AutoScrollMinSize = new Size(1404, 961);
         ClientSize = new Size(1404, 961);
         Controls.Add(_pdfPreviewGroup);
+        Controls.Add(showPreviewMarkersCheck);
         Controls.Add(_positionInfoLabel);
         Controls.Add(contentEditGroup);
         Controls.Add(statusList);
@@ -1477,6 +1492,7 @@ partial class Form1
     private System.Windows.Forms.Label supplementalTextLabel;
     private System.Windows.Forms.TextBox supplementalTextInput;
     private System.Windows.Forms.Button createPdfButton;
+    private System.Windows.Forms.CheckBox showPreviewMarkersCheck;
     private System.Windows.Forms.GroupBox _pdfPreviewGroup;
     private C1.Win.FlexViewer.C1FlexViewer _flexViewer;
     private System.Windows.Forms.Button exportPdfButton;

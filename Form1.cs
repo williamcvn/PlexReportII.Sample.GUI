@@ -131,6 +131,15 @@ namespace PlexReportII.Sample.GUI
                     (float)_marginVerticalInput.Value);
                 
                 AddStatusMessage($"邊界變更: 左右 {_marginHorizontalInput.Value}, 上下 {_marginVerticalInput.Value}");
+                
+                // 若 PDF 已經建立過，提醒邊界變更的作用範圍
+                if (_currentReport != null)
+                {
+                    MessageBox.Show("邊界設定已變更。\n\n請注意：已經繪製的內容不會因此自動重新排版，這只會影響後續的動作。\n如果您需要讓整份檔案套用新邊界，請點擊「清除 PDF」再重新「建立 PDF」。", 
+                        "邊界變更提醒", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                }
+                
+                RefreshPreview();
             }
         }
 
@@ -194,6 +203,11 @@ namespace PlexReportII.Sample.GUI
         {
             _currentLogo = null;
             AddStatusMessage("Logo 已移除");
+            RefreshPreview();
+        }
+
+        private void ShowPreviewMarkersCheck_Changed(object? sender, EventArgs e)
+        {
             RefreshPreview();
         }
 
@@ -756,6 +770,13 @@ namespace PlexReportII.Sample.GUI
                     foreach (var action in _reportActions)
                     {
                         action(tempReport);
+                    }
+
+                    // 繪製預覽專用標記（僅預覽可見，輸出 PDF 不含這些標記）
+                    if (showPreviewMarkersCheck != null && showPreviewMarkersCheck.Checked)
+                    {
+                        tempReport.DrawPreviewBoundaryMarkers();
+                        tempReport.DrawPreviewYMarker();
                     }
 
                     // 匯出暫存報表至檔案 (含 Header/Footer)
