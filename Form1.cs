@@ -725,11 +725,6 @@ namespace PlexReportII.Sample.GUI
             }
         }
 
-        private void PreviewPdfButton_Click(object? sender, EventArgs e)
-        {
-            RefreshPreview();
-        }
-
         /// <summary>
         /// 即時重新產生預覽。建立暫存 SampleReport 重播所有操作後匯出至 FlexViewer。
         /// 原始 _currentReport 完全不受影響。

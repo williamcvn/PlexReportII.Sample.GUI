@@ -53,7 +53,6 @@ partial class Form1
         supplementalTextLabel = new Label();
         supplementalTextInput = new TextBox();
         createPdfButton = new Button();
-        previewPdfButton = new Button();
         exportPdfButton = new Button();
         openFolderButton = new Button();
         clearPdfButton = new Button();
@@ -568,18 +567,6 @@ partial class Form1
         createPdfButton.Text = "建立 PDF";
         createPdfButton.UseVisualStyleBackColor = true;
         createPdfButton.Click += CreatePdfButton_Click;
-        // 
-        // previewPdfButton
-        // 
-        previewPdfButton.Font = new Font("Microsoft JhengHei UI", 10F, FontStyle.Bold);
-        previewPdfButton.ForeColor = Color.DarkBlue;
-        previewPdfButton.Location = new Point(460, 385);
-        previewPdfButton.Name = "previewPdfButton";
-        previewPdfButton.Size = new Size(100, 40);
-        previewPdfButton.TabIndex = 15;
-        previewPdfButton.Text = "預覽 PDF";
-        previewPdfButton.UseVisualStyleBackColor = true;
-        previewPdfButton.Click += PreviewPdfButton_Click;
         // 
         // exportPdfButton
         // 
@@ -1396,7 +1383,6 @@ partial class Form1
         AutoScrollMinSize = new Size(1404, 961);
         ClientSize = new Size(1404, 961);
         Controls.Add(_pdfPreviewGroup);
-        Controls.Add(previewPdfButton);
         Controls.Add(_positionInfoLabel);
         Controls.Add(contentEditGroup);
         Controls.Add(statusList);
@@ -1491,7 +1477,6 @@ partial class Form1
     private System.Windows.Forms.Label supplementalTextLabel;
     private System.Windows.Forms.TextBox supplementalTextInput;
     private System.Windows.Forms.Button createPdfButton;
-    private System.Windows.Forms.Button previewPdfButton;
     private System.Windows.Forms.GroupBox _pdfPreviewGroup;
     private C1.Win.FlexViewer.C1FlexViewer _flexViewer;
     private System.Windows.Forms.Button exportPdfButton;
