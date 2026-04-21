@@ -129,7 +129,9 @@ partial class Form1
         _editModeCombo = new ComboBox();
         editModeLabel = new Label();
         _pdfPreviewGroup = new GroupBox();
+        _flexViewer = new C1.Win.FlexViewer.C1FlexViewer();
         _positionInfoLabel = new TextBox();
+        _pdfPreviewGroup.SuspendLayout();
         marginGroup.SuspendLayout();
         ((System.ComponentModel.ISupportInitialize)_marginHorizontalInput).BeginInit();
         ((System.ComponentModel.ISupportInitialize)_marginVerticalInput).BeginInit();
@@ -1402,6 +1404,7 @@ partial class Form1
         // 
         // _pdfPreviewGroup
         // 
+        _pdfPreviewGroup.Controls.Add(_flexViewer);
         _pdfPreviewGroup.Anchor = AnchorStyles.Top | AnchorStyles.Bottom | AnchorStyles.Left | AnchorStyles.Right;
         _pdfPreviewGroup.Font = new Font("Microsoft JhengHei UI", 10F, FontStyle.Bold);
         _pdfPreviewGroup.Location = new Point(795, 20);
@@ -1411,6 +1414,12 @@ partial class Form1
         _pdfPreviewGroup.TabStop = false;
         _pdfPreviewGroup.Text = "PDF 即時預覽";
         // 
+        // _flexViewer
+        // 
+        _flexViewer.Dock = DockStyle.Fill;
+        _flexViewer.Name = "_flexViewer";
+        _flexViewer.TabIndex = 0;
+        //
         // _positionInfoLabel
         // 
         _positionInfoLabel.BackColor = SystemColors.Control;
@@ -1448,6 +1457,7 @@ partial class Form1
         Name = "Form1";
         StartPosition = FormStartPosition.CenterScreen;
         Text = "PlexReportII GUI";
+        _pdfPreviewGroup.ResumeLayout(false);
         marginGroup.ResumeLayout(false);
         marginGroup.PerformLayout();
         ((System.ComponentModel.ISupportInitialize)_marginHorizontalInput).EndInit();
