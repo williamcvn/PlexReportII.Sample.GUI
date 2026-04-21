@@ -75,6 +75,10 @@ partial class Form1
         drawSummaryTableButton = new Button();
         loadSummaryDataCsvButton = new Button();
         summaryTableLabel = new Label();
+        _panelSummary5ColTable = new Panel();
+        drawSummary5ColTableButton = new Button();
+        loadSummary5ColDataCsvButton = new Button();
+        summary5ColTableLabel = new Label();
         _panelSignature = new Panel();
         drawSignatureButton = new Button();
         signatureLabel = new Label();
@@ -125,7 +129,6 @@ partial class Form1
         _editModeCombo = new ComboBox();
         editModeLabel = new Label();
         _pdfPreviewGroup = new GroupBox();
-        _flexViewer = new C1.Win.FlexViewer.C1FlexViewer();
         _positionInfoLabel = new TextBox();
         marginGroup.SuspendLayout();
         ((System.ComponentModel.ISupportInitialize)_marginHorizontalInput).BeginInit();
@@ -136,6 +139,7 @@ partial class Form1
         _panelSampleControlTable.SuspendLayout();
         _panelWellInfo.SuspendLayout();
         _panelSummaryTable.SuspendLayout();
+        _panelSummary5ColTable.SuspendLayout();
         _panelSignature.SuspendLayout();
         _panelPcncDetailTable.SuspendLayout();
         _panelPcncTable.SuspendLayout();
@@ -149,8 +153,6 @@ partial class Form1
         ((System.ComponentModel.ISupportInitialize)_lineLengthInput).BeginInit();
         ((System.ComponentModel.ISupportInitialize)_lineStartXInput).BeginInit();
         _panelKitInfo.SuspendLayout();
-        _pdfPreviewGroup.SuspendLayout();
-        ((System.ComponentModel.ISupportInitialize)_flexViewer).BeginInit();
         SuspendLayout();
         // 
         // titleLabel
@@ -573,10 +575,11 @@ partial class Form1
         // 
         showPreviewMarkersCheck.AutoSize = true;
         showPreviewMarkersCheck.Checked = true;
+        showPreviewMarkersCheck.CheckState = CheckState.Checked;
         showPreviewMarkersCheck.Font = new Font("Microsoft JhengHei UI", 9F);
         showPreviewMarkersCheck.Location = new Point(460, 398);
         showPreviewMarkersCheck.Name = "showPreviewMarkersCheck";
-        showPreviewMarkersCheck.Size = new Size(180, 19);
+        showPreviewMarkersCheck.Size = new Size(157, 19);
         showPreviewMarkersCheck.TabIndex = 20;
         showPreviewMarkersCheck.Text = "顯示預覽標記 (Y軸/邊界)";
         showPreviewMarkersCheck.UseVisualStyleBackColor = true;
@@ -631,6 +634,7 @@ partial class Form1
         contentEditGroup.Controls.Add(_panelIndvResultTable);
         contentEditGroup.Controls.Add(_panelSampleControlTable);
         contentEditGroup.Controls.Add(_panelWellInfo);
+        contentEditGroup.Controls.Add(_panelSummary5ColTable);
         contentEditGroup.Controls.Add(_panelSummaryTable);
         contentEditGroup.Controls.Add(_panelSignature);
         contentEditGroup.Controls.Add(_panelPcncDetailTable);
@@ -822,6 +826,49 @@ partial class Form1
         summaryTableLabel.Size = new Size(261, 18);
         summaryTableLabel.TabIndex = 0;
         summaryTableLabel.Text = "繪製 SUMMARY_RESULT_TABLE_6COL";
+        // 
+        // _panelSummary5ColTable
+        // 
+        _panelSummary5ColTable.Controls.Add(drawSummary5ColTableButton);
+        _panelSummary5ColTable.Controls.Add(loadSummary5ColDataCsvButton);
+        _panelSummary5ColTable.Controls.Add(summary5ColTableLabel);
+        _panelSummary5ColTable.Location = new Point(20, 70);
+        _panelSummary5ColTable.Name = "_panelSummary5ColTable";
+        _panelSummary5ColTable.Size = new Size(710, 210);
+        _panelSummary5ColTable.TabIndex = 15;
+        _panelSummary5ColTable.Visible = false;
+        // 
+        // drawSummary5ColTableButton
+        // 
+        drawSummary5ColTableButton.Font = new Font("Microsoft JhengHei UI", 10F);
+        drawSummary5ColTableButton.Location = new Point(410, 10);
+        drawSummary5ColTableButton.Name = "drawSummary5ColTableButton";
+        drawSummary5ColTableButton.Size = new Size(80, 28);
+        drawSummary5ColTableButton.TabIndex = 2;
+        drawSummary5ColTableButton.Text = "繪製";
+        drawSummary5ColTableButton.UseVisualStyleBackColor = true;
+        drawSummary5ColTableButton.Click += DrawSummary5ColumnTableButton_Click;
+        // 
+        // loadSummary5ColDataCsvButton
+        // 
+        loadSummary5ColDataCsvButton.Font = new Font("Microsoft JhengHei UI", 10F);
+        loadSummary5ColDataCsvButton.Location = new Point(300, 10);
+        loadSummary5ColDataCsvButton.Name = "loadSummary5ColDataCsvButton";
+        loadSummary5ColDataCsvButton.Size = new Size(100, 28);
+        loadSummary5ColDataCsvButton.TabIndex = 1;
+        loadSummary5ColDataCsvButton.Text = "載入 CSV";
+        loadSummary5ColDataCsvButton.UseVisualStyleBackColor = true;
+        loadSummary5ColDataCsvButton.Click += LoadSummary5ColumnDataCsvButton_Click;
+        // 
+        // summary5ColTableLabel
+        // 
+        summary5ColTableLabel.AutoSize = true;
+        summary5ColTableLabel.Font = new Font("Microsoft JhengHei UI", 10F, FontStyle.Bold);
+        summary5ColTableLabel.Location = new Point(10, 10);
+        summary5ColTableLabel.Name = "summary5ColTableLabel";
+        summary5ColTableLabel.Size = new Size(261, 18);
+        summary5ColTableLabel.TabIndex = 0;
+        summary5ColTableLabel.Text = "繪製 SUMMARY_RESULT_TABLE_5COL";
         // 
         // _panelSignature
         // 
@@ -1337,10 +1384,10 @@ partial class Form1
         _editModeCombo.DropDownStyle = ComboBoxStyle.DropDownList;
         _editModeCombo.Font = new Font("Microsoft JhengHei UI", 10F);
         _editModeCombo.FormattingEnabled = true;
-        _editModeCombo.Items.AddRange(new object[] { "表格資訊 (Kit Info Table)", "繪製線條 (Draw Line)", "頁面控制 (Page Control)", "插入間隔 (Insert Spacing)", "多色段落 (Multi-Color Text)", "加入 PC/NC 註解", "加入 PC/NC Table", "加入 PC/NC Fail Detail Table", "加入簽名區", "加入SUMMARY_RESULT_TABLE_6COL", "加入INDV_CONTROL_TABLE", "加入WELL_INFO_TABLE", "加入INDV_RESULT_TABLE" });
+        _editModeCombo.Items.AddRange(new object[] { "表格資訊 (Kit Info Table)", "繪製線條 (Draw Line)", "頁面控制 (Page Control)", "插入間隔 (Insert Spacing)", "多色段落 (Multi-Color Text)", "加入 PC/NC 註解", "加入 PC/NC Table", "加入 PC/NC Fail Detail Table", "加入簽名區", "加入SUMMARY_RESULT_TABLE_6COL", "加入SUMMARY_RESULT_TABLE_5COL", "加入INDV_CONTROL_TABLE", "加入WELL_INFO_TABLE", "加入INDV_RESULT_TABLE" });
         _editModeCombo.Location = new Point(100, 30);
         _editModeCombo.Name = "_editModeCombo";
-        _editModeCombo.Size = new Size(250, 25);
+        _editModeCombo.Size = new Size(280, 25);
         _editModeCombo.TabIndex = 1;
         _editModeCombo.SelectedIndexChanged += EditModeCombo_SelectedIndexChanged;
         // 
@@ -1356,7 +1403,6 @@ partial class Form1
         // _pdfPreviewGroup
         // 
         _pdfPreviewGroup.Anchor = AnchorStyles.Top | AnchorStyles.Bottom | AnchorStyles.Left | AnchorStyles.Right;
-        _pdfPreviewGroup.Controls.Add(_flexViewer);
         _pdfPreviewGroup.Font = new Font("Microsoft JhengHei UI", 10F, FontStyle.Bold);
         _pdfPreviewGroup.Location = new Point(795, 20);
         _pdfPreviewGroup.Name = "_pdfPreviewGroup";
@@ -1364,16 +1410,6 @@ partial class Form1
         _pdfPreviewGroup.TabIndex = 17;
         _pdfPreviewGroup.TabStop = false;
         _pdfPreviewGroup.Text = "PDF 即時預覽";
-        // 
-        // _flexViewer
-        // 
-        _flexViewer.AutoScrollMargin = new Size(0, 0);
-        _flexViewer.AutoScrollMinSize = new Size(0, 0);
-        _flexViewer.Dock = DockStyle.Fill;
-        _flexViewer.Location = new Point(3, 20);
-        _flexViewer.Name = "_flexViewer";
-        _flexViewer.Size = new Size(594, 912);
-        _flexViewer.TabIndex = 0;
         // 
         // _positionInfoLabel
         // 
@@ -1428,6 +1464,8 @@ partial class Form1
         _panelWellInfo.PerformLayout();
         _panelSummaryTable.ResumeLayout(false);
         _panelSummaryTable.PerformLayout();
+        _panelSummary5ColTable.ResumeLayout(false);
+        _panelSummary5ColTable.PerformLayout();
         _panelSignature.ResumeLayout(false);
         _panelSignature.PerformLayout();
         _panelPcncDetailTable.ResumeLayout(false);
@@ -1447,8 +1485,6 @@ partial class Form1
         ((System.ComponentModel.ISupportInitialize)_lineStartXInput).EndInit();
         _panelKitInfo.ResumeLayout(false);
         _panelKitInfo.PerformLayout();
-        _pdfPreviewGroup.ResumeLayout(false);
-        ((System.ComponentModel.ISupportInitialize)_flexViewer).EndInit();
         ResumeLayout(false);
         PerformLayout();
 
@@ -1554,6 +1590,10 @@ partial class Form1
     private System.Windows.Forms.Label summaryTableLabel;
     private System.Windows.Forms.Button loadSummaryDataCsvButton;
     private System.Windows.Forms.Button drawSummaryTableButton;
+    private System.Windows.Forms.Panel _panelSummary5ColTable;
+    private System.Windows.Forms.Label summary5ColTableLabel;
+    private System.Windows.Forms.Button loadSummary5ColDataCsvButton;
+    private System.Windows.Forms.Button drawSummary5ColTableButton;
     private System.Windows.Forms.Panel _panelWellInfo;
     private System.Windows.Forms.Label wellInfoLabel;
     private System.Windows.Forms.Button loadWellInfoCsvButton;
