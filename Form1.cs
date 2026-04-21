@@ -34,6 +34,7 @@ namespace PlexReportII.Sample.GUI
         private bool _isFlagNoteCsvLoaded = false;
         private List<string> _flagNoteData = new List<string>();
         private List<List<string>> _summaryResultData = new List<List<string>>();
+        private List<List<string>> _summaryResult5ColData = new List<List<string>>();
         private List<WellInfoItem> _wellInfoData = new List<WellInfoItem>();
         private List<List<string>> _sampleControlData = new List<List<string>>();
         private List<List<string>> _indvResultData = new List<List<string>>();
@@ -117,9 +118,10 @@ namespace PlexReportII.Sample.GUI
             if (_panelPcncDetailTable != null) _panelPcncDetailTable.Visible = idx == 7;
             if (_panelSignature != null) _panelSignature.Visible = idx == 8;
             if (_panelSummaryTable != null) _panelSummaryTable.Visible = idx == 9;
-            if (_panelSampleControlTable != null) _panelSampleControlTable.Visible = idx == 10;
-            if (_panelWellInfo != null) _panelWellInfo.Visible = idx == 11;
-            if (_panelIndvResultTable != null) _panelIndvResultTable.Visible = idx == 12;
+            if (_panelSummary5ColTable != null) _panelSummary5ColTable.Visible = idx == 10;
+            if (_panelSampleControlTable != null) _panelSampleControlTable.Visible = idx == 11;
+            if (_panelWellInfo != null) _panelWellInfo.Visible = idx == 12;
+            if (_panelIndvResultTable != null) _panelIndvResultTable.Visible = idx == 13;
         }
 
         private void MarginInput_ValueChanged(object? sender, EventArgs e)
@@ -1588,6 +1590,129 @@ namespace PlexReportII.Sample.GUI
             catch (Exception ex)
             {
                 _logger.Error("繪製 Summary Result Table 失敗", ex);
+                MessageBox.Show($"繪製失敗: {ex.Message}", "錯誤", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
+        }
+
+        private void LoadSummary5ColumnDataCsvButton_Click(object? sender, EventArgs e)
+        {
+            using OpenFileDialog ofd = new OpenFileDialog
+            {
+                Filter = "CSV 檔案|*.csv|所有檔案|*.*",
+                Title = "選取 Summary Result Data CSV 檔案 (5 欄)"
+            };
+
+            string defaultPath = @"D:\PlexReportII\DataSource\";
+            if (Directory.Exists(defaultPath))
+            {
+                ofd.InitialDirectory = defaultPath;
+            }
+
+            if (ofd.ShowDialog() == DialogResult.OK)
+            {
+                try
+                {
+                    string content = File.ReadAllText(ofd.FileName);
+                    var parsedCsv = ParseCsvWithQuotes(content);
+
+                    _summaryResult5ColData.Clear();
+
+                    bool isFirstRow = true;
+                    foreach (var row in parsedCsv)
+                    {
+                        if (isFirstRow)
+                        {
+                            isFirstRow = false; // 略過 Header
+                            continue;
+                        }
+
+                        // 確保至少有資料 (允許部分欄位缺失)
+                        if (row.Count > 0)
+                        {
+                            // 標準化為 5 欄
+                            // 第 4 欄 (index 3) 為 "Target Pathogen / AMR Genes"，
+                            // CSV 內包含 Tab 字符連接的兩段資料，直接保留，
+                            // 由 BasePdfReport.DrawSummaryResult5ColumnTable 的 NormalizeText() 轉換為換行
+                            var normalizedRow = new List<string>();
+                            for (int i = 0; i < 5; i++)
+                            {
+                                normalizedRow.Add(i < row.Count ? row[i].Trim() : "");
+                            }
+                            _summaryResult5ColData.Add(normalizedRow);
+                        }
+                    }
+
+                    AddStatusMessage($"Summary 5COL Data 已載入: {_summaryResult5ColData.Count} 筆資料");
+                    AddStatusMessage($"來源檔案: {ofd.FileName}");
+
+                    var msgBuilder = new System.Text.StringBuilder();
+                    msgBuilder.AppendLine($"CSV 載入成功！共載入 {_summaryResult5ColData.Count} 筆資料。");
+
+                    MessageBox.Show(msgBuilder.ToString(), "系統提示", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                }
+                catch (Exception ex)
+                {
+                    _logger.Error("載入 Summary 5COL Data CSV 失敗", ex);
+                    MessageBox.Show($"載入 CSV 失敗: {ex.Message}", "錯誤", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                }
+            }
+        }
+
+        private void DrawSummary5ColumnTableButton_Click(object? sender, EventArgs e)
+        {
+            try
+            {
+                if (_currentReport == null || !_currentReport.IsPdfInitialized)
+                {
+                    MessageBox.Show("請先建立 PDF 物件後才能執行此操作。", "警告", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                    return;
+                }
+
+                if (_summaryResult5ColData.Count == 0)
+                {
+                    MessageBox.Show("請先載入 Summary Result Data CSV (5 欄)。", "警告", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                    return;
+                }
+
+                // 判斷是否需要包含 Flag Note
+                CheckBox? suppCheck = null;
+                CheckBox? aboveCheck = null;
+                Control? textInput = null;
+                foreach (Control c in this.Controls)
+                {
+                    if (c.Name == "headerFooterGroup")
+                    {
+                        suppCheck = c.Controls["addSupplementalTextCheck"] as CheckBox;
+                        aboveCheck = c.Controls["addAboveFooterCheck"] as CheckBox;
+                        textInput = c.Controls["supplementalTextInput"];
+                    }
+                }
+
+                bool shouldDrawFlagNote = (suppCheck != null && suppCheck.Checked) || (aboveCheck != null && aboveCheck.Checked);
+                string? supplementalText = (suppCheck != null && suppCheck.Checked && textInput != null) ? textInput.Text : null;
+
+                var summaryDataCopy = _summaryResult5ColData.Select(r => new List<string>(r)).ToList();
+                var flagNoteCopy = shouldDrawFlagNote ? new List<string>(_flagNoteData) : null;
+                string? suppTextCopy = supplementalText;
+                bool flagNoteFlagCopy = shouldDrawFlagNote;
+
+                _currentReport.DrawSummaryResult5ColumnTable(
+                    summaryDataCopy,
+                    flagNoteCopy,
+                    suppTextCopy,
+                    flagNoteFlagCopy);
+                _reportActions.Add(r => r.DrawSummaryResult5ColumnTable(
+                    summaryDataCopy,
+                    flagNoteCopy,
+                    suppTextCopy,
+                    flagNoteFlagCopy));
+
+                AddStatusMessage($"Summary Result Table (5COL) 繪製完成 (共 {_summaryResult5ColData.Count} 筆資料)");
+                RefreshPreview();
+            }
+            catch (Exception ex)
+            {
+                _logger.Error("繪製 Summary Result Table (5COL) 失敗", ex);
                 MessageBox.Show($"繪製失敗: {ex.Message}", "錯誤", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
         }
