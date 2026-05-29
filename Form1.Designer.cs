@@ -86,6 +86,10 @@ partial class Form1
         drawPcncDetailButton = new Button();
         loadPcncDetailCsvButton = new Button();
         pcncDetailTableLabel = new Label();
+        _panelPcncDetail5ColTable = new Panel();
+        drawPcncDetail5ColButton = new Button();
+        loadPcncDetail5ColCsvButton = new Button();
+        pcncDetail5ColTableLabel = new Label();
         _panelPcncTable = new Panel();
         drawPcncTableButton = new Button();
         loadPcncTableCsvButton = new Button();
@@ -144,6 +148,7 @@ partial class Form1
         _panelSummary5ColTable.SuspendLayout();
         _panelSignature.SuspendLayout();
         _panelPcncDetailTable.SuspendLayout();
+        _panelPcncDetail5ColTable.SuspendLayout();
         _panelPcncTable.SuspendLayout();
         _panelPcncNote.SuspendLayout();
         _panelMultiColor.SuspendLayout();
@@ -640,6 +645,7 @@ partial class Form1
         contentEditGroup.Controls.Add(_panelSummaryTable);
         contentEditGroup.Controls.Add(_panelSignature);
         contentEditGroup.Controls.Add(_panelPcncDetailTable);
+        contentEditGroup.Controls.Add(_panelPcncDetail5ColTable);
         contentEditGroup.Controls.Add(_panelPcncTable);
         contentEditGroup.Controls.Add(_panelPcncNote);
         contentEditGroup.Controls.Add(_panelMultiColor);
@@ -917,7 +923,7 @@ partial class Form1
         // drawPcncDetailButton
         // 
         drawPcncDetailButton.Font = new Font("Microsoft JhengHei UI", 10F);
-        drawPcncDetailButton.Location = new Point(330, 10);
+        drawPcncDetailButton.Location = new Point(440, 10);
         drawPcncDetailButton.Name = "drawPcncDetailButton";
         drawPcncDetailButton.Size = new Size(80, 28);
         drawPcncDetailButton.TabIndex = 2;
@@ -928,7 +934,7 @@ partial class Form1
         // loadPcncDetailCsvButton
         // 
         loadPcncDetailCsvButton.Font = new Font("Microsoft JhengHei UI", 10F);
-        loadPcncDetailCsvButton.Location = new Point(220, 10);
+        loadPcncDetailCsvButton.Location = new Point(330, 10);
         loadPcncDetailCsvButton.Name = "loadPcncDetailCsvButton";
         loadPcncDetailCsvButton.Size = new Size(100, 28);
         loadPcncDetailCsvButton.TabIndex = 1;
@@ -945,6 +951,49 @@ partial class Form1
         pcncDetailTableLabel.Size = new Size(198, 18);
         pcncDetailTableLabel.TabIndex = 0;
         pcncDetailTableLabel.Text = "加入PCNC_FAIL_DETAIL_TABLE_6COL";
+        // 
+        // _panelPcncDetail5ColTable
+        // 
+        _panelPcncDetail5ColTable.Controls.Add(drawPcncDetail5ColButton);
+        _panelPcncDetail5ColTable.Controls.Add(loadPcncDetail5ColCsvButton);
+        _panelPcncDetail5ColTable.Controls.Add(pcncDetail5ColTableLabel);
+        _panelPcncDetail5ColTable.Location = new Point(20, 70);
+        _panelPcncDetail5ColTable.Name = "_panelPcncDetail5ColTable";
+        _panelPcncDetail5ColTable.Size = new Size(710, 210);
+        _panelPcncDetail5ColTable.TabIndex = 16;
+        _panelPcncDetail5ColTable.Visible = false;
+        // 
+        // drawPcncDetail5ColButton
+        // 
+        drawPcncDetail5ColButton.Font = new Font("Microsoft JhengHei UI", 10F);
+        drawPcncDetail5ColButton.Location = new Point(440, 10);
+        drawPcncDetail5ColButton.Name = "drawPcncDetail5ColButton";
+        drawPcncDetail5ColButton.Size = new Size(80, 28);
+        drawPcncDetail5ColButton.TabIndex = 2;
+        drawPcncDetail5ColButton.Text = "繪製";
+        drawPcncDetail5ColButton.UseVisualStyleBackColor = true;
+        drawPcncDetail5ColButton.Click += DrawPcncDetail5ColButton_Click;
+        // 
+        // loadPcncDetail5ColCsvButton
+        // 
+        loadPcncDetail5ColCsvButton.Font = new Font("Microsoft JhengHei UI", 10F);
+        loadPcncDetail5ColCsvButton.Location = new Point(330, 10);
+        loadPcncDetail5ColCsvButton.Name = "loadPcncDetail5ColCsvButton";
+        loadPcncDetail5ColCsvButton.Size = new Size(100, 28);
+        loadPcncDetail5ColCsvButton.TabIndex = 1;
+        loadPcncDetail5ColCsvButton.Text = "載入 CSV";
+        loadPcncDetail5ColCsvButton.UseVisualStyleBackColor = true;
+        loadPcncDetail5ColCsvButton.Click += LoadPcncDetail5ColCsvButton_Click;
+        // 
+        // pcncDetail5ColTableLabel
+        // 
+        pcncDetail5ColTableLabel.AutoSize = true;
+        pcncDetail5ColTableLabel.Font = new Font("Microsoft JhengHei UI", 10F, FontStyle.Bold);
+        pcncDetail5ColTableLabel.Location = new Point(10, 10);
+        pcncDetail5ColTableLabel.Name = "pcncDetail5ColTableLabel";
+        pcncDetail5ColTableLabel.Size = new Size(198, 18);
+        pcncDetail5ColTableLabel.TabIndex = 0;
+        pcncDetail5ColTableLabel.Text = "加入PCNC_FAIL_DETAIL_TABLE_5COL";
         // 
         // _panelPcncTable
         // 
@@ -1386,7 +1435,7 @@ partial class Form1
         _editModeCombo.DropDownStyle = ComboBoxStyle.DropDownList;
         _editModeCombo.Font = new Font("Microsoft JhengHei UI", 10F);
         _editModeCombo.FormattingEnabled = true;
-        _editModeCombo.Items.AddRange(new object[] { "表格資訊 (Kit Info Table)", "繪製線條 (Draw Line)", "頁面控制 (Page Control)", "插入間隔 (Insert Spacing)", "多色段落 (Multi-Color Text)", "加入 PC/NC 註解", "加入 PC/NC Table", "加入PCNC_FAIL_DETAIL_TABLE_6COL", "加入簽名區", "加入SUMMARY_RESULT_TABLE_6COL", "加入SUMMARY_RESULT_TABLE_5COL", "加入INDV_CONTROL_TABLE", "加入WELL_INFO_TABLE", "加入INDV_RESULT_TABLE" });
+        _editModeCombo.Items.AddRange(new object[] { "表格資訊 (Kit Info Table)", "繪製線條 (Draw Line)", "頁面控制 (Page Control)", "插入間隔 (Insert Spacing)", "多色段落 (Multi-Color Text)", "加入 PC/NC 註解", "加入 PC/NC Table", "加入PCNC_FAIL_DETAIL_TABLE_6COL", "加入PCNC_FAIL_DETAIL_TABLE_5COL", "加入簽名區", "加入SUMMARY_RESULT_TABLE_6COL", "加入SUMMARY_RESULT_TABLE_5COL", "加入INDV_CONTROL_TABLE", "加入WELL_INFO_TABLE", "加入INDV_RESULT_TABLE" });
         _editModeCombo.Location = new Point(100, 30);
         _editModeCombo.Name = "_editModeCombo";
         _editModeCombo.Size = new Size(280, 25);
@@ -1480,6 +1529,8 @@ partial class Form1
         _panelSignature.PerformLayout();
         _panelPcncDetailTable.ResumeLayout(false);
         _panelPcncDetailTable.PerformLayout();
+        _panelPcncDetail5ColTable.ResumeLayout(false);
+        _panelPcncDetail5ColTable.PerformLayout();
         _panelPcncTable.ResumeLayout(false);
         _panelPcncTable.PerformLayout();
         _panelPcncNote.ResumeLayout(false);
@@ -1592,6 +1643,10 @@ partial class Form1
     private System.Windows.Forms.Label pcncDetailTableLabel;
     private System.Windows.Forms.Button loadPcncDetailCsvButton;
     private System.Windows.Forms.Button drawPcncDetailButton;
+    private System.Windows.Forms.Panel _panelPcncDetail5ColTable;
+    private System.Windows.Forms.Label pcncDetail5ColTableLabel;
+    private System.Windows.Forms.Button loadPcncDetail5ColCsvButton;
+    private System.Windows.Forms.Button drawPcncDetail5ColButton;
     private System.Windows.Forms.TextBox _positionInfoLabel;
     private System.Windows.Forms.Panel _panelSignature;
     private System.Windows.Forms.Label signatureLabel;

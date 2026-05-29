@@ -31,6 +31,7 @@ namespace PlexReportII.Sample.GUI
         private List<PcncLegendItem> _pcncData = new List<PcncLegendItem>();
         private List<PcncTableItem> _pcncTableData = new List<PcncTableItem>();
         private List<PcncDetailItem> _pcncDetailData = new List<PcncDetailItem>();
+        private List<PcncDetailItem> _pcncDetail5ColData = new List<PcncDetailItem>();
         private bool _isFlagNoteCsvLoaded = false;
         private List<string> _flagNoteData = new List<string>();
         private List<List<string>> _summaryResultData = new List<List<string>>();
@@ -116,12 +117,13 @@ namespace PlexReportII.Sample.GUI
             if (_panelPcncNote != null) _panelPcncNote.Visible = idx == 5;
             if (_panelPcncTable != null) _panelPcncTable.Visible = idx == 6;
             if (_panelPcncDetailTable != null) _panelPcncDetailTable.Visible = idx == 7;
-            if (_panelSignature != null) _panelSignature.Visible = idx == 8;
-            if (_panelSummaryTable != null) _panelSummaryTable.Visible = idx == 9;
-            if (_panelSummary5ColTable != null) _panelSummary5ColTable.Visible = idx == 10;
-            if (_panelSampleControlTable != null) _panelSampleControlTable.Visible = idx == 11;
-            if (_panelWellInfo != null) _panelWellInfo.Visible = idx == 12;
-            if (_panelIndvResultTable != null) _panelIndvResultTable.Visible = idx == 13;
+            if (_panelPcncDetail5ColTable != null) _panelPcncDetail5ColTable.Visible = idx == 8;
+            if (_panelSignature != null) _panelSignature.Visible = idx == 9;
+            if (_panelSummaryTable != null) _panelSummaryTable.Visible = idx == 10;
+            if (_panelSummary5ColTable != null) _panelSummary5ColTable.Visible = idx == 11;
+            if (_panelSampleControlTable != null) _panelSampleControlTable.Visible = idx == 12;
+            if (_panelWellInfo != null) _panelWellInfo.Visible = idx == 13;
+            if (_panelIndvResultTable != null) _panelIndvResultTable.Visible = idx == 14;
         }
 
         private void MarginInput_ValueChanged(object? sender, EventArgs e)
@@ -546,12 +548,128 @@ namespace PlexReportII.Sample.GUI
                 _reportActions.Add(r => r.DrawPcncDetailTable(pcncDetailDataCopy, styleCopy));
 
                 UpdatePositionInfo();
-                AddStatusMessage($"PC/NC Detail Table 已繪製 ({_pcncDetailData.Count} 筆資料)");
+                AddStatusMessage($"PC/NC Detail Table (6COL) 已繪製 ({_pcncDetailData.Count} 筆資料)");
                 RefreshPreview();
             }
             catch (Exception ex)
             {
-                _logger.Error("繪製 PC/NC Detail Table 失敗", ex);
+                _logger.Error("繪製 PC/NC Detail Table (6COL) 失敗", ex);
+                MessageBox.Show($"繪製失敗: {ex.Message}", "錯誤", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
+        }
+
+        // ===== PC/NC Fail Detail Table 5COL =====
+
+        private void LoadPcncDetail5ColCsvButton_Click(object? sender, EventArgs e)
+        {
+            using (OpenFileDialog ofd = new OpenFileDialog())
+            {
+                ofd.Filter = "CSV Files|*.csv|All Files|*.*";
+                string defaultPath = @"D:\PlexReportII\DataSource\";
+                if (Directory.Exists(defaultPath))
+                {
+                    ofd.InitialDirectory = defaultPath;
+                }
+
+                if (ofd.ShowDialog() == DialogResult.OK)
+                {
+                    try
+                    {
+                        _pcncDetail5ColData.Clear();
+                        string fileContent = File.ReadAllText(ofd.FileName);
+                        var rows = ParseCsvWithQuotes(fileContent);
+
+                        bool isFirstRow = true;
+                        foreach (var row in rows)
+                        {
+                            if (isFirstRow)
+                            {
+                                isFirstRow = false;
+                                continue; // Skip header
+                            }
+
+                            if (row.Count < 5) continue;
+
+                            // 5 欄 CSV: Well ID, Control, Target Pathogen / AMR Genes, MFI, Cutoff
+                            // 合併欄存入 NucleotideChange，Mutation 留空
+                            _pcncDetail5ColData.Add(new PcncDetailItem
+                            {
+                                WellId = row[0].Trim(),
+                                Control = row[1].Trim(),
+                                NucleotideChange = row[2].Trim(),
+                                Mutation = string.Empty,
+                                MFI = row[3].Trim(),
+                                Cutoff = row[4].Trim()
+                            });
+                        }
+
+                        _logger.Info($"PC/NC Detail 5COL CSV 已載入: {_pcncDetail5ColData.Count} 筆資料");
+                        AddStatusMessage($"PC/NC Detail 5COL CSV 已載入: {_pcncDetail5ColData.Count} 筆資料");
+                        AddStatusMessage($"來源檔案: {ofd.FileName}");
+                    }
+                    catch (Exception ex)
+                    {
+                        _logger.Error("載入 PC/NC Detail 5COL CSV 失敗", ex);
+                        MessageBox.Show("載入 CSV 失敗: " + ex.Message, "錯誤", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                    }
+                }
+            }
+        }
+
+        private void DrawPcncDetail5ColButton_Click(object? sender, EventArgs e)
+        {
+            try
+            {
+                if (_currentReport == null || !_currentReport.IsPdfInitialized)
+                {
+                    MessageBox.Show("請先建立 PDF (按「建立 PDF」按鈕)。", "警告", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                    return;
+                }
+
+                if (_pcncDetail5ColData == null || _pcncDetail5ColData.Count == 0)
+                {
+                    MessageBox.Show("請先載入 PC/NC Detail 5COL CSV 資料。", "警告", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                    return;
+                }
+
+                var style = new DetailTableStyle
+                {
+                    Headers = new[] { "Well ID", "Control", "Target Pathogen / AMR Genes", "MFI", "Cutoff" },
+                    WidthBaseDivider = 8,
+                    ColumnWidthFactors = new float[] { 1, 1, 4, 1, 1 },
+                    ColumnWidthOffsets = new float[] { -5, -15, 50, -15, -15 },
+                    ColumnAlignments = new int[] { 0, 0, 0, 1, 1 },
+
+                    EnableColumnMerge = true,
+                    MergeColumnIndices = new int[] { 0, 1 },
+
+                    RowSeparator = RowSeparatorMode.SkipMergedColumns,
+
+                    AlternatingRowBackground = true,
+                    EvenRowColor = System.Drawing.Color.White,
+                    OddRowColor = System.Drawing.Color.FromArgb(245, 245, 245),
+
+                    BorderWidth = 0.2f,
+                    BorderColor = System.Drawing.Color.Gray,
+                    FontSize = 10f,
+                    CellPadding = 5f,
+
+                    RedrawHeaderOnNewPage = true,
+                };
+
+                var pcncDetail5ColDataCopy = new List<PcncDetailItem>(_pcncDetail5ColData);
+                var styleCopy = style;
+                _currentReport.DrawPcncDetailTable5Col(pcncDetail5ColDataCopy, styleCopy);
+                _reportActions.Add(r => r.DrawPcncDetailTable5Col(pcncDetail5ColDataCopy, styleCopy));
+
+                UpdatePositionInfo();
+                _logger.Info($"PC/NC Detail Table (5COL) 已繪製 ({_pcncDetail5ColData.Count} 筆資料)");
+                AddStatusMessage($"PC/NC Detail Table (5COL) 已繪製 ({_pcncDetail5ColData.Count} 筆資料)");
+                RefreshPreview();
+            }
+            catch (Exception ex)
+            {
+                _logger.Error("繪製 PC/NC Detail Table (5COL) 失敗", ex);
                 MessageBox.Show($"繪製失敗: {ex.Message}", "錯誤", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
         }
