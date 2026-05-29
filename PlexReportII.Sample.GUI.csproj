@@ -6,9 +6,7 @@
 
   <ItemGroup>
     <PackageReference Include="C1.Win.FlexViewer" Version="10.0.20252.755" />
-    <Reference Include="PlexReportII">
-      <HintPath>..\..\src\PlexReportII\bin\Release\net8.0\PlexReportII.dll</HintPath>
-    </Reference>
+    <ProjectReference Include="..\..\src\PlexReportII\PlexReportII.csproj" />
     <PackageReference Include="System.Drawing.Common" Version="10.0.2" />
     <PackageReference Include="C1.Pdf" Version="10.0.20252.225" />
   </ItemGroup>
