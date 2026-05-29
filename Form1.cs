@@ -39,6 +39,7 @@ namespace PlexReportII.Sample.GUI
         private List<WellInfoItem> _wellInfoData = new List<WellInfoItem>();
         private List<List<string>> _sampleControlData = new List<List<string>>();
         private List<List<string>> _indvResultData = new List<List<string>>();
+        private List<List<string>> _indvResult4ColData = new List<List<string>>();
 
         /// <summary>
         /// 記錄所有繪圖操作的 Action 委派清單，供無損預覽重播使用。
@@ -124,6 +125,7 @@ namespace PlexReportII.Sample.GUI
             if (_panelSampleControlTable != null) _panelSampleControlTable.Visible = idx == 12;
             if (_panelWellInfo != null) _panelWellInfo.Visible = idx == 13;
             if (_panelIndvResultTable != null) _panelIndvResultTable.Visible = idx == 14;
+            if (_panelIndvResult4ColTable != null) _panelIndvResult4ColTable.Visible = idx == 15;
         }
 
         private void MarginInput_ValueChanged(object? sender, EventArgs e)
@@ -2066,6 +2068,78 @@ namespace PlexReportII.Sample.GUI
             catch (Exception ex)
             {
                 _logger.Error("繪製 Individual Result Table 失敗", ex);
+                MessageBox.Show($"繪製失敗: {ex.Message}", "錯誤", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
+        }
+
+        private void LoadIndvResult4ColCsvButton_Click(object? sender, EventArgs e)
+        {
+            using (OpenFileDialog ofd = new OpenFileDialog())
+            {
+                ofd.Filter = "CSV Files|*.csv|All Files|*.*";
+                string defaultPath = @"D:\PlexReportII\DataSource\";
+                if (Directory.Exists(defaultPath))
+                {
+                    ofd.InitialDirectory = defaultPath;
+                }
+
+                if (ofd.ShowDialog() == DialogResult.OK)
+                {
+                    try
+                    {
+                        _indvResult4ColData.Clear();
+                        string content = File.ReadAllText(ofd.FileName);
+                        List<List<string>> parsedCsv = ParseCsvWithQuotes(content);
+
+                        foreach (List<string> row in parsedCsv)
+                        {
+                            // 確保每列 4 欄
+                            while (row.Count < 4)
+                            {
+                                row.Add("");
+                            }
+                            _indvResult4ColData.Add(row);
+                        }
+
+                        int bodyCount = _indvResult4ColData.Count > 0 ? _indvResult4ColData.Count - 1 : 0;
+                        AddStatusMessage($"Individual Result 4COL CSV 已載入: {bodyCount} 筆資料 (含 Header)");
+                        AddStatusMessage($"來源檔案: {ofd.FileName}");
+                    }
+                    catch (Exception ex)
+                    {
+                        MessageBox.Show("載入 CSV 失敗: " + ex.Message, "錯誤", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                    }
+                }
+            }
+        }
+
+        private void DrawIndvResult4ColButton_Click(object? sender, EventArgs e)
+        {
+            try
+            {
+                if (_currentReport == null || !_currentReport.IsPdfInitialized)
+                {
+                    MessageBox.Show("請先建立 PDF (按「建立 PDF」按鈕)。", "警告", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                    return;
+                }
+
+                if (_indvResult4ColData == null || _indvResult4ColData.Count < 2)
+                {
+                    MessageBox.Show("請先載入 Individual Result 4COL CSV 資料 (至少含 Header + 1 筆資料)。", "警告", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                    return;
+                }
+
+                var indvResult4ColCopy = _indvResult4ColData.Select(r => new List<string>(r)).ToList();
+                _currentReport.DrawIndividualResultTable4Col(indvResult4ColCopy);
+                _reportActions.Add(r => r.DrawIndividualResultTable4Col(indvResult4ColCopy));
+
+                UpdatePositionInfo();
+                AddStatusMessage($"Individual Result Table 4COL 繪製完成 (共 {_indvResult4ColData.Count - 1} 筆資料)");
+                RefreshPreview();
+            }
+            catch (Exception ex)
+            {
+                _logger.Error("繪製 Individual Result Table 4COL 失敗", ex);
                 MessageBox.Show($"繪製失敗: {ex.Message}", "錯誤", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
         }

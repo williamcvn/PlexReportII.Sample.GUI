@@ -63,6 +63,10 @@ partial class Form1
         drawIndvResultButton = new Button();
         loadIndvResultCsvButton = new Button();
         indvResultLabel = new Label();
+        _panelIndvResult4ColTable = new Panel();
+        drawIndvResult4ColButton = new Button();
+        loadIndvResult4ColCsvButton = new Button();
+        indvResult4ColLabel = new Label();
         _panelSampleControlTable = new Panel();
         drawSampleControlButton = new Button();
         loadSampleControlCsvButton = new Button();
@@ -638,6 +642,7 @@ partial class Form1
         // 
         // contentEditGroup
         // 
+        contentEditGroup.Controls.Add(_panelIndvResult4ColTable);
         contentEditGroup.Controls.Add(_panelIndvResultTable);
         contentEditGroup.Controls.Add(_panelSampleControlTable);
         contentEditGroup.Controls.Add(_panelWellInfo);
@@ -705,6 +710,49 @@ partial class Form1
         indvResultLabel.Size = new Size(291, 18);
         indvResultLabel.TabIndex = 0;
         indvResultLabel.Text = "繪製Individual INDV_RESULT_TABLE_5COL";
+        // 
+        // _panelIndvResult4ColTable
+        // 
+        _panelIndvResult4ColTable.Controls.Add(drawIndvResult4ColButton);
+        _panelIndvResult4ColTable.Controls.Add(loadIndvResult4ColCsvButton);
+        _panelIndvResult4ColTable.Controls.Add(indvResult4ColLabel);
+        _panelIndvResult4ColTable.Location = new Point(20, 70);
+        _panelIndvResult4ColTable.Name = "_panelIndvResult4ColTable";
+        _panelIndvResult4ColTable.Size = new Size(710, 210);
+        _panelIndvResult4ColTable.TabIndex = 17;
+        _panelIndvResult4ColTable.Visible = false;
+        // 
+        // drawIndvResult4ColButton
+        // 
+        drawIndvResult4ColButton.Font = new Font("Microsoft JhengHei UI", 10F);
+        drawIndvResult4ColButton.Location = new Point(470, 10);
+        drawIndvResult4ColButton.Name = "drawIndvResult4ColButton";
+        drawIndvResult4ColButton.Size = new Size(80, 28);
+        drawIndvResult4ColButton.TabIndex = 2;
+        drawIndvResult4ColButton.Text = "繪製";
+        drawIndvResult4ColButton.UseVisualStyleBackColor = true;
+        drawIndvResult4ColButton.Click += DrawIndvResult4ColButton_Click;
+        // 
+        // loadIndvResult4ColCsvButton
+        // 
+        loadIndvResult4ColCsvButton.Font = new Font("Microsoft JhengHei UI", 10F);
+        loadIndvResult4ColCsvButton.Location = new Point(360, 10);
+        loadIndvResult4ColCsvButton.Name = "loadIndvResult4ColCsvButton";
+        loadIndvResult4ColCsvButton.Size = new Size(100, 28);
+        loadIndvResult4ColCsvButton.TabIndex = 1;
+        loadIndvResult4ColCsvButton.Text = "載入 CSV";
+        loadIndvResult4ColCsvButton.UseVisualStyleBackColor = true;
+        loadIndvResult4ColCsvButton.Click += LoadIndvResult4ColCsvButton_Click;
+        // 
+        // indvResult4ColLabel
+        // 
+        indvResult4ColLabel.AutoSize = true;
+        indvResult4ColLabel.Font = new Font("Microsoft JhengHei UI", 10F, FontStyle.Bold);
+        indvResult4ColLabel.Location = new Point(10, 10);
+        indvResult4ColLabel.Name = "indvResult4ColLabel";
+        indvResult4ColLabel.Size = new Size(291, 18);
+        indvResult4ColLabel.TabIndex = 0;
+        indvResult4ColLabel.Text = "繪製Individual INDV_RESULT_TABLE_4COL";
         // 
         // _panelSampleControlTable
         // 
@@ -1435,7 +1483,7 @@ partial class Form1
         _editModeCombo.DropDownStyle = ComboBoxStyle.DropDownList;
         _editModeCombo.Font = new Font("Microsoft JhengHei UI", 10F);
         _editModeCombo.FormattingEnabled = true;
-        _editModeCombo.Items.AddRange(new object[] { "表格資訊 (Kit Info Table)", "繪製線條 (Draw Line)", "頁面控制 (Page Control)", "插入間隔 (Insert Spacing)", "多色段落 (Multi-Color Text)", "加入 PC/NC 註解", "加入 PC/NC Table", "加入PCNC_FAIL_DETAIL_TABLE_6COL", "加入PCNC_FAIL_DETAIL_TABLE_5COL", "加入簽名區", "加入SUMMARY_RESULT_TABLE_6COL", "加入SUMMARY_RESULT_TABLE_5COL", "加入INDV_CONTROL_TABLE", "加入WELL_INFO_TABLE", "加入INDV_RESULT_TABLE" });
+        _editModeCombo.Items.AddRange(new object[] { "表格資訊 (Kit Info Table)", "繪製線條 (Draw Line)", "頁面控制 (Page Control)", "插入間隔 (Insert Spacing)", "多色段落 (Multi-Color Text)", "加入 PC/NC 註解", "加入 PC/NC Table", "加入PCNC_FAIL_DETAIL_TABLE_6COL", "加入PCNC_FAIL_DETAIL_TABLE_5COL", "加入簽名區", "加入SUMMARY_RESULT_TABLE_6COL", "加入SUMMARY_RESULT_TABLE_5COL", "加入INDV_CONTROL_TABLE", "加入WELL_INFO_TABLE", "加入INDV_RESULT_TABLE_5COL", "加入INDV_RESULT_TABLE_4COL" });
         _editModeCombo.Location = new Point(100, 30);
         _editModeCombo.Name = "_editModeCombo";
         _editModeCombo.Size = new Size(280, 25);
@@ -1671,4 +1719,8 @@ partial class Form1
     private System.Windows.Forms.Label indvResultLabel;
     private System.Windows.Forms.Button loadIndvResultCsvButton;
     private System.Windows.Forms.Button drawIndvResultButton;
+    private System.Windows.Forms.Panel _panelIndvResult4ColTable;
+    private System.Windows.Forms.Label indvResult4ColLabel;
+    private System.Windows.Forms.Button loadIndvResult4ColCsvButton;
+    private System.Windows.Forms.Button drawIndvResult4ColButton;
 }
