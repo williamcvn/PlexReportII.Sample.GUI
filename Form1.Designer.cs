@@ -944,7 +944,7 @@ partial class Form1
         pcncDetailTableLabel.Name = "pcncDetailTableLabel";
         pcncDetailTableLabel.Size = new Size(198, 18);
         pcncDetailTableLabel.TabIndex = 0;
-        pcncDetailTableLabel.Text = "加入 PC/NC Fail Detail Table";
+        pcncDetailTableLabel.Text = "加入PCNC_FAIL_DETAIL_TABLE_6COL";
         // 
         // _panelPcncTable
         // 
@@ -1048,9 +1048,9 @@ partial class Form1
         // drawMultiColorButton
         // 
         drawMultiColorButton.Font = new Font("Microsoft JhengHei UI", 10F);
-        drawMultiColorButton.Location = new Point(690, 10);
+        drawMultiColorButton.Location = new Point(645, 10);
         drawMultiColorButton.Name = "drawMultiColorButton";
-        drawMultiColorButton.Size = new Size(80, 28);
+        drawMultiColorButton.Size = new Size(60, 28);
         drawMultiColorButton.TabIndex = 4;
         drawMultiColorButton.Text = "繪製";
         drawMultiColorButton.UseVisualStyleBackColor = true;
@@ -1059,9 +1059,9 @@ partial class Form1
         // linkTargetCheck
         // 
         linkTargetCheck.Font = new Font("Microsoft JhengHei UI", 9F);
-        linkTargetCheck.Location = new Point(590, 10);
+        linkTargetCheck.Location = new Point(545, 10);
         linkTargetCheck.Name = "linkTargetCheck";
-        linkTargetCheck.Size = new Size(90, 28);
+        linkTargetCheck.Size = new Size(95, 28);
         linkTargetCheck.TabIndex = 3;
         linkTargetCheck.Text = "LinkTarget";
         linkTargetCheck.UseVisualStyleBackColor = true;
@@ -1069,9 +1069,9 @@ partial class Form1
         // outlineCheck
         // 
         outlineCheck.Font = new Font("Microsoft JhengHei UI", 9F);
-        outlineCheck.Location = new Point(510, 10);
+        outlineCheck.Location = new Point(465, 10);
         outlineCheck.Name = "outlineCheck";
-        outlineCheck.Size = new Size(70, 28);
+        outlineCheck.Size = new Size(75, 28);
         outlineCheck.TabIndex = 2;
         outlineCheck.Text = "Outline";
         outlineCheck.UseVisualStyleBackColor = true;
@@ -1079,9 +1079,9 @@ partial class Form1
         // _multiColorInput
         // 
         _multiColorInput.Font = new Font("Microsoft JhengHei UI", 9F);
-        _multiColorInput.Location = new Point(220, 10);
+        _multiColorInput.Location = new Point(160, 10);
         _multiColorInput.Name = "_multiColorInput";
-        _multiColorInput.Size = new Size(280, 23);
+        _multiColorInput.Size = new Size(300, 23);
         _multiColorInput.TabIndex = 1;
         _multiColorInput.Text = "紅色文字|Red;藍色文字|Blue;一般文字";
         // 
@@ -1090,7 +1090,7 @@ partial class Form1
         multiColorLabel.Font = new Font("Microsoft JhengHei UI", 10F, FontStyle.Bold);
         multiColorLabel.Location = new Point(10, 10);
         multiColorLabel.Name = "multiColorLabel";
-        multiColorLabel.Size = new Size(200, 28);
+        multiColorLabel.Size = new Size(145, 28);
         multiColorLabel.TabIndex = 0;
         multiColorLabel.Text = "以多種顏色繪製文字段落";
         multiColorLabel.TextAlign = ContentAlignment.MiddleLeft;
@@ -1386,7 +1386,7 @@ partial class Form1
         _editModeCombo.DropDownStyle = ComboBoxStyle.DropDownList;
         _editModeCombo.Font = new Font("Microsoft JhengHei UI", 10F);
         _editModeCombo.FormattingEnabled = true;
-        _editModeCombo.Items.AddRange(new object[] { "表格資訊 (Kit Info Table)", "繪製線條 (Draw Line)", "頁面控制 (Page Control)", "插入間隔 (Insert Spacing)", "多色段落 (Multi-Color Text)", "加入 PC/NC 註解", "加入 PC/NC Table", "加入 PC/NC Fail Detail Table", "加入簽名區", "加入SUMMARY_RESULT_TABLE_6COL", "加入SUMMARY_RESULT_TABLE_5COL", "加入INDV_CONTROL_TABLE", "加入WELL_INFO_TABLE", "加入INDV_RESULT_TABLE" });
+        _editModeCombo.Items.AddRange(new object[] { "表格資訊 (Kit Info Table)", "繪製線條 (Draw Line)", "頁面控制 (Page Control)", "插入間隔 (Insert Spacing)", "多色段落 (Multi-Color Text)", "加入 PC/NC 註解", "加入 PC/NC Table", "加入PCNC_FAIL_DETAIL_TABLE_6COL", "加入簽名區", "加入SUMMARY_RESULT_TABLE_6COL", "加入SUMMARY_RESULT_TABLE_5COL", "加入INDV_CONTROL_TABLE", "加入WELL_INFO_TABLE", "加入INDV_RESULT_TABLE" });
         _editModeCombo.Location = new Point(100, 30);
         _editModeCombo.Name = "_editModeCombo";
         _editModeCombo.Size = new Size(280, 25);
