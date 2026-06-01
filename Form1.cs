@@ -118,14 +118,11 @@ namespace PlexReportII.Sample.GUI
             if (_panelPcncNote != null) _panelPcncNote.Visible = idx == 5;
             if (_panelPcncTable != null) _panelPcncTable.Visible = idx == 6;
             if (_panelPcncDetailTable != null) _panelPcncDetailTable.Visible = idx == 7;
-            if (_panelPcncDetail5ColTable != null) _panelPcncDetail5ColTable.Visible = idx == 8;
-            if (_panelSignature != null) _panelSignature.Visible = idx == 9;
-            if (_panelSummaryTable != null) _panelSummaryTable.Visible = idx == 10;
-            if (_panelSummary5ColTable != null) _panelSummary5ColTable.Visible = idx == 11;
-            if (_panelSampleControlTable != null) _panelSampleControlTable.Visible = idx == 12;
-            if (_panelWellInfo != null) _panelWellInfo.Visible = idx == 13;
-            if (_panelIndvResultTable != null) _panelIndvResultTable.Visible = idx == 14;
-            if (_panelIndvResult4ColTable != null) _panelIndvResult4ColTable.Visible = idx == 15;
+            if (_panelSignature != null) _panelSignature.Visible = idx == 8;
+            if (_panelSummaryTable != null) _panelSummaryTable.Visible = idx == 9;
+            if (_panelSampleControlTable != null) _panelSampleControlTable.Visible = idx == 10;
+            if (_panelWellInfo != null) _panelWellInfo.Visible = idx == 11;
+            if (_panelIndvResultTable != null) _panelIndvResultTable.Visible = idx == 12;
         }
 
         private void MarginInput_ValueChanged(object? sender, EventArgs e)

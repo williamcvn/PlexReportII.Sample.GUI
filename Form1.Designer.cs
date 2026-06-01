@@ -63,7 +63,6 @@ partial class Form1
         drawIndvResultButton = new Button();
         loadIndvResultCsvButton = new Button();
         indvResultLabel = new Label();
-        _panelIndvResult4ColTable = new Panel();
         drawIndvResult4ColButton = new Button();
         loadIndvResult4ColCsvButton = new Button();
         indvResult4ColLabel = new Label();
@@ -79,7 +78,6 @@ partial class Form1
         drawSummaryTableButton = new Button();
         loadSummaryDataCsvButton = new Button();
         summaryTableLabel = new Label();
-        _panelSummary5ColTable = new Panel();
         drawSummary5ColTableButton = new Button();
         loadSummary5ColDataCsvButton = new Button();
         summary5ColTableLabel = new Label();
@@ -90,7 +88,7 @@ partial class Form1
         drawPcncDetailButton = new Button();
         loadPcncDetailCsvButton = new Button();
         pcncDetailTableLabel = new Label();
-        _panelPcncDetail5ColTable = new Panel();
+
         drawPcncDetail5ColButton = new Button();
         loadPcncDetail5ColCsvButton = new Button();
         pcncDetail5ColTableLabel = new Label();
@@ -149,10 +147,8 @@ partial class Form1
         _panelSampleControlTable.SuspendLayout();
         _panelWellInfo.SuspendLayout();
         _panelSummaryTable.SuspendLayout();
-        _panelSummary5ColTable.SuspendLayout();
         _panelSignature.SuspendLayout();
         _panelPcncDetailTable.SuspendLayout();
-        _panelPcncDetail5ColTable.SuspendLayout();
         _panelPcncTable.SuspendLayout();
         _panelPcncNote.SuspendLayout();
         _panelMultiColor.SuspendLayout();
@@ -642,15 +638,12 @@ partial class Form1
         // 
         // contentEditGroup
         // 
-        contentEditGroup.Controls.Add(_panelIndvResult4ColTable);
         contentEditGroup.Controls.Add(_panelIndvResultTable);
         contentEditGroup.Controls.Add(_panelSampleControlTable);
         contentEditGroup.Controls.Add(_panelWellInfo);
-        contentEditGroup.Controls.Add(_panelSummary5ColTable);
         contentEditGroup.Controls.Add(_panelSummaryTable);
         contentEditGroup.Controls.Add(_panelSignature);
         contentEditGroup.Controls.Add(_panelPcncDetailTable);
-        contentEditGroup.Controls.Add(_panelPcncDetail5ColTable);
         contentEditGroup.Controls.Add(_panelPcncTable);
         contentEditGroup.Controls.Add(_panelPcncNote);
         contentEditGroup.Controls.Add(_panelMultiColor);
@@ -668,11 +661,12 @@ partial class Form1
         contentEditGroup.TabStop = false;
         contentEditGroup.Text = "報表內容編輯 (操作相關Block功能完成文件內容)";
         // 
-        // _panelIndvResultTable
-        // 
         _panelIndvResultTable.Controls.Add(drawIndvResultButton);
         _panelIndvResultTable.Controls.Add(loadIndvResultCsvButton);
         _panelIndvResultTable.Controls.Add(indvResultLabel);
+        _panelIndvResultTable.Controls.Add(drawIndvResult4ColButton);
+        _panelIndvResultTable.Controls.Add(loadIndvResult4ColCsvButton);
+        _panelIndvResultTable.Controls.Add(indvResult4ColLabel);
         _panelIndvResultTable.Location = new Point(20, 70);
         _panelIndvResultTable.Name = "_panelIndvResultTable";
         _panelIndvResultTable.Size = new Size(710, 210);
@@ -711,24 +705,13 @@ partial class Form1
         indvResultLabel.TabIndex = 0;
         indvResultLabel.Text = "繪製Individual INDV_RESULT_TABLE_5COL";
         // 
-        // _panelIndvResult4ColTable
-        // 
-        _panelIndvResult4ColTable.Controls.Add(drawIndvResult4ColButton);
-        _panelIndvResult4ColTable.Controls.Add(loadIndvResult4ColCsvButton);
-        _panelIndvResult4ColTable.Controls.Add(indvResult4ColLabel);
-        _panelIndvResult4ColTable.Location = new Point(20, 70);
-        _panelIndvResult4ColTable.Name = "_panelIndvResult4ColTable";
-        _panelIndvResult4ColTable.Size = new Size(710, 210);
-        _panelIndvResult4ColTable.TabIndex = 17;
-        _panelIndvResult4ColTable.Visible = false;
-        // 
         // drawIndvResult4ColButton
         // 
         drawIndvResult4ColButton.Font = new Font("Microsoft JhengHei UI", 10F);
-        drawIndvResult4ColButton.Location = new Point(470, 10);
+        drawIndvResult4ColButton.Location = new Point(470, 40);
         drawIndvResult4ColButton.Name = "drawIndvResult4ColButton";
         drawIndvResult4ColButton.Size = new Size(80, 28);
-        drawIndvResult4ColButton.TabIndex = 2;
+        drawIndvResult4ColButton.TabIndex = 5;
         drawIndvResult4ColButton.Text = "繪製";
         drawIndvResult4ColButton.UseVisualStyleBackColor = true;
         drawIndvResult4ColButton.Click += DrawIndvResult4ColButton_Click;
@@ -736,10 +719,10 @@ partial class Form1
         // loadIndvResult4ColCsvButton
         // 
         loadIndvResult4ColCsvButton.Font = new Font("Microsoft JhengHei UI", 10F);
-        loadIndvResult4ColCsvButton.Location = new Point(360, 10);
+        loadIndvResult4ColCsvButton.Location = new Point(360, 40);
         loadIndvResult4ColCsvButton.Name = "loadIndvResult4ColCsvButton";
         loadIndvResult4ColCsvButton.Size = new Size(100, 28);
-        loadIndvResult4ColCsvButton.TabIndex = 1;
+        loadIndvResult4ColCsvButton.TabIndex = 4;
         loadIndvResult4ColCsvButton.Text = "載入 CSV";
         loadIndvResult4ColCsvButton.UseVisualStyleBackColor = true;
         loadIndvResult4ColCsvButton.Click += LoadIndvResult4ColCsvButton_Click;
@@ -748,10 +731,10 @@ partial class Form1
         // 
         indvResult4ColLabel.AutoSize = true;
         indvResult4ColLabel.Font = new Font("Microsoft JhengHei UI", 10F, FontStyle.Bold);
-        indvResult4ColLabel.Location = new Point(10, 10);
+        indvResult4ColLabel.Location = new Point(10, 40);
         indvResult4ColLabel.Name = "indvResult4ColLabel";
         indvResult4ColLabel.Size = new Size(291, 18);
-        indvResult4ColLabel.TabIndex = 0;
+        indvResult4ColLabel.TabIndex = 3;
         indvResult4ColLabel.Text = "繪製Individual INDV_RESULT_TABLE_4COL";
         // 
         // _panelSampleControlTable
@@ -840,11 +823,12 @@ partial class Form1
         wellInfoLabel.TabIndex = 0;
         wellInfoLabel.Text = "繪製 WELL_INFO_TABLE";
         // 
-        // _panelSummaryTable
-        // 
         _panelSummaryTable.Controls.Add(drawSummaryTableButton);
         _panelSummaryTable.Controls.Add(loadSummaryDataCsvButton);
         _panelSummaryTable.Controls.Add(summaryTableLabel);
+        _panelSummaryTable.Controls.Add(drawSummary5ColTableButton);
+        _panelSummaryTable.Controls.Add(loadSummary5ColDataCsvButton);
+        _panelSummaryTable.Controls.Add(summary5ColTableLabel);
         _panelSummaryTable.Location = new Point(20, 70);
         _panelSummaryTable.Name = "_panelSummaryTable";
         _panelSummaryTable.Size = new Size(710, 210);
@@ -883,24 +867,13 @@ partial class Form1
         summaryTableLabel.TabIndex = 0;
         summaryTableLabel.Text = "繪製 SUMMARY_RESULT_TABLE_6COL";
         // 
-        // _panelSummary5ColTable
-        // 
-        _panelSummary5ColTable.Controls.Add(drawSummary5ColTableButton);
-        _panelSummary5ColTable.Controls.Add(loadSummary5ColDataCsvButton);
-        _panelSummary5ColTable.Controls.Add(summary5ColTableLabel);
-        _panelSummary5ColTable.Location = new Point(20, 70);
-        _panelSummary5ColTable.Name = "_panelSummary5ColTable";
-        _panelSummary5ColTable.Size = new Size(710, 210);
-        _panelSummary5ColTable.TabIndex = 15;
-        _panelSummary5ColTable.Visible = false;
-        // 
         // drawSummary5ColTableButton
         // 
         drawSummary5ColTableButton.Font = new Font("Microsoft JhengHei UI", 10F);
-        drawSummary5ColTableButton.Location = new Point(410, 10);
+        drawSummary5ColTableButton.Location = new Point(410, 40);
         drawSummary5ColTableButton.Name = "drawSummary5ColTableButton";
         drawSummary5ColTableButton.Size = new Size(80, 28);
-        drawSummary5ColTableButton.TabIndex = 2;
+        drawSummary5ColTableButton.TabIndex = 5;
         drawSummary5ColTableButton.Text = "繪製";
         drawSummary5ColTableButton.UseVisualStyleBackColor = true;
         drawSummary5ColTableButton.Click += DrawSummary5ColumnTableButton_Click;
@@ -908,10 +881,10 @@ partial class Form1
         // loadSummary5ColDataCsvButton
         // 
         loadSummary5ColDataCsvButton.Font = new Font("Microsoft JhengHei UI", 10F);
-        loadSummary5ColDataCsvButton.Location = new Point(300, 10);
+        loadSummary5ColDataCsvButton.Location = new Point(300, 40);
         loadSummary5ColDataCsvButton.Name = "loadSummary5ColDataCsvButton";
         loadSummary5ColDataCsvButton.Size = new Size(100, 28);
-        loadSummary5ColDataCsvButton.TabIndex = 1;
+        loadSummary5ColDataCsvButton.TabIndex = 4;
         loadSummary5ColDataCsvButton.Text = "載入 CSV";
         loadSummary5ColDataCsvButton.UseVisualStyleBackColor = true;
         loadSummary5ColDataCsvButton.Click += LoadSummary5ColumnDataCsvButton_Click;
@@ -920,10 +893,10 @@ partial class Form1
         // 
         summary5ColTableLabel.AutoSize = true;
         summary5ColTableLabel.Font = new Font("Microsoft JhengHei UI", 10F, FontStyle.Bold);
-        summary5ColTableLabel.Location = new Point(10, 10);
+        summary5ColTableLabel.Location = new Point(10, 40);
         summary5ColTableLabel.Name = "summary5ColTableLabel";
         summary5ColTableLabel.Size = new Size(261, 18);
-        summary5ColTableLabel.TabIndex = 0;
+        summary5ColTableLabel.TabIndex = 3;
         summary5ColTableLabel.Text = "繪製 SUMMARY_RESULT_TABLE_5COL";
         // 
         // _panelSignature
@@ -962,6 +935,9 @@ partial class Form1
         _panelPcncDetailTable.Controls.Add(drawPcncDetailButton);
         _panelPcncDetailTable.Controls.Add(loadPcncDetailCsvButton);
         _panelPcncDetailTable.Controls.Add(pcncDetailTableLabel);
+        _panelPcncDetailTable.Controls.Add(drawPcncDetail5ColButton);
+        _panelPcncDetailTable.Controls.Add(loadPcncDetail5ColCsvButton);
+        _panelPcncDetailTable.Controls.Add(pcncDetail5ColTableLabel);
         _panelPcncDetailTable.Location = new Point(20, 70);
         _panelPcncDetailTable.Name = "_panelPcncDetailTable";
         _panelPcncDetailTable.Size = new Size(710, 210);
@@ -1000,24 +976,13 @@ partial class Form1
         pcncDetailTableLabel.TabIndex = 0;
         pcncDetailTableLabel.Text = "加入PCNC_FAIL_DETAIL_TABLE_6COL";
         // 
-        // _panelPcncDetail5ColTable
-        // 
-        _panelPcncDetail5ColTable.Controls.Add(drawPcncDetail5ColButton);
-        _panelPcncDetail5ColTable.Controls.Add(loadPcncDetail5ColCsvButton);
-        _panelPcncDetail5ColTable.Controls.Add(pcncDetail5ColTableLabel);
-        _panelPcncDetail5ColTable.Location = new Point(20, 70);
-        _panelPcncDetail5ColTable.Name = "_panelPcncDetail5ColTable";
-        _panelPcncDetail5ColTable.Size = new Size(710, 210);
-        _panelPcncDetail5ColTable.TabIndex = 16;
-        _panelPcncDetail5ColTable.Visible = false;
-        // 
         // drawPcncDetail5ColButton
         // 
         drawPcncDetail5ColButton.Font = new Font("Microsoft JhengHei UI", 10F);
-        drawPcncDetail5ColButton.Location = new Point(440, 10);
+        drawPcncDetail5ColButton.Location = new Point(440, 40);
         drawPcncDetail5ColButton.Name = "drawPcncDetail5ColButton";
         drawPcncDetail5ColButton.Size = new Size(80, 28);
-        drawPcncDetail5ColButton.TabIndex = 2;
+        drawPcncDetail5ColButton.TabIndex = 5;
         drawPcncDetail5ColButton.Text = "繪製";
         drawPcncDetail5ColButton.UseVisualStyleBackColor = true;
         drawPcncDetail5ColButton.Click += DrawPcncDetail5ColButton_Click;
@@ -1025,10 +990,10 @@ partial class Form1
         // loadPcncDetail5ColCsvButton
         // 
         loadPcncDetail5ColCsvButton.Font = new Font("Microsoft JhengHei UI", 10F);
-        loadPcncDetail5ColCsvButton.Location = new Point(330, 10);
+        loadPcncDetail5ColCsvButton.Location = new Point(330, 40);
         loadPcncDetail5ColCsvButton.Name = "loadPcncDetail5ColCsvButton";
         loadPcncDetail5ColCsvButton.Size = new Size(100, 28);
-        loadPcncDetail5ColCsvButton.TabIndex = 1;
+        loadPcncDetail5ColCsvButton.TabIndex = 4;
         loadPcncDetail5ColCsvButton.Text = "載入 CSV";
         loadPcncDetail5ColCsvButton.UseVisualStyleBackColor = true;
         loadPcncDetail5ColCsvButton.Click += LoadPcncDetail5ColCsvButton_Click;
@@ -1037,10 +1002,10 @@ partial class Form1
         // 
         pcncDetail5ColTableLabel.AutoSize = true;
         pcncDetail5ColTableLabel.Font = new Font("Microsoft JhengHei UI", 10F, FontStyle.Bold);
-        pcncDetail5ColTableLabel.Location = new Point(10, 10);
+        pcncDetail5ColTableLabel.Location = new Point(10, 40);
         pcncDetail5ColTableLabel.Name = "pcncDetail5ColTableLabel";
         pcncDetail5ColTableLabel.Size = new Size(198, 18);
-        pcncDetail5ColTableLabel.TabIndex = 0;
+        pcncDetail5ColTableLabel.TabIndex = 3;
         pcncDetail5ColTableLabel.Text = "加入PCNC_FAIL_DETAIL_TABLE_5COL";
         // 
         // _panelPcncTable
@@ -1483,7 +1448,7 @@ partial class Form1
         _editModeCombo.DropDownStyle = ComboBoxStyle.DropDownList;
         _editModeCombo.Font = new Font("Microsoft JhengHei UI", 10F);
         _editModeCombo.FormattingEnabled = true;
-        _editModeCombo.Items.AddRange(new object[] { "表格資訊 (Kit Info Table)", "繪製線條 (Draw Line)", "頁面控制 (Page Control)", "插入間隔 (Insert Spacing)", "多色段落 (Multi-Color Text)", "加入 PC/NC 註解", "加入 PC/NC Table", "加入PCNC_FAIL_DETAIL_TABLE_6COL", "加入PCNC_FAIL_DETAIL_TABLE_5COL", "加入簽名區", "加入SUMMARY_RESULT_TABLE_6COL", "加入SUMMARY_RESULT_TABLE_5COL", "加入INDV_CONTROL_TABLE", "加入WELL_INFO_TABLE", "加入INDV_RESULT_TABLE_5COL", "加入INDV_RESULT_TABLE_4COL" });
+        _editModeCombo.Items.AddRange(new object[] { "表格資訊 (Kit Info Table)", "繪製線條 (Draw Line)", "頁面控制 (Page Control)", "插入間隔 (Insert Spacing)", "多色段落 (Multi-Color Text)", "加入 PC/NC 註解", "加入 PC/NC Table", "加入PCNC_FAIL_DETAIL_TABLE", "加入簽名區", "加入SUMMARY_RESULT_TABLE", "加入INDV_CONTROL_TABLE", "加入WELL_INFO_TABLE", "加入INDV_RESULT_TABLE" });
         _editModeCombo.Location = new Point(100, 30);
         _editModeCombo.Name = "_editModeCombo";
         _editModeCombo.Size = new Size(280, 25);
@@ -1571,14 +1536,10 @@ partial class Form1
         _panelWellInfo.PerformLayout();
         _panelSummaryTable.ResumeLayout(false);
         _panelSummaryTable.PerformLayout();
-        _panelSummary5ColTable.ResumeLayout(false);
-        _panelSummary5ColTable.PerformLayout();
         _panelSignature.ResumeLayout(false);
         _panelSignature.PerformLayout();
         _panelPcncDetailTable.ResumeLayout(false);
         _panelPcncDetailTable.PerformLayout();
-        _panelPcncDetail5ColTable.ResumeLayout(false);
-        _panelPcncDetail5ColTable.PerformLayout();
         _panelPcncTable.ResumeLayout(false);
         _panelPcncTable.PerformLayout();
         _panelPcncNote.ResumeLayout(false);
@@ -1691,7 +1652,6 @@ partial class Form1
     private System.Windows.Forms.Label pcncDetailTableLabel;
     private System.Windows.Forms.Button loadPcncDetailCsvButton;
     private System.Windows.Forms.Button drawPcncDetailButton;
-    private System.Windows.Forms.Panel _panelPcncDetail5ColTable;
     private System.Windows.Forms.Label pcncDetail5ColTableLabel;
     private System.Windows.Forms.Button loadPcncDetail5ColCsvButton;
     private System.Windows.Forms.Button drawPcncDetail5ColButton;
@@ -1703,7 +1663,6 @@ partial class Form1
     private System.Windows.Forms.Label summaryTableLabel;
     private System.Windows.Forms.Button loadSummaryDataCsvButton;
     private System.Windows.Forms.Button drawSummaryTableButton;
-    private System.Windows.Forms.Panel _panelSummary5ColTable;
     private System.Windows.Forms.Label summary5ColTableLabel;
     private System.Windows.Forms.Button loadSummary5ColDataCsvButton;
     private System.Windows.Forms.Button drawSummary5ColTableButton;
@@ -1719,7 +1678,6 @@ partial class Form1
     private System.Windows.Forms.Label indvResultLabel;
     private System.Windows.Forms.Button loadIndvResultCsvButton;
     private System.Windows.Forms.Button drawIndvResultButton;
-    private System.Windows.Forms.Panel _panelIndvResult4ColTable;
     private System.Windows.Forms.Label indvResult4ColLabel;
     private System.Windows.Forms.Button loadIndvResult4ColCsvButton;
     private System.Windows.Forms.Button drawIndvResult4ColButton;
